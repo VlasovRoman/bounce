@@ -1,53 +1,64 @@
-#include "hge.h"
+#include <iostream>
 
 #include "ResInit.h"
-#include "cGame.h"
+#include "game.h"
 
-cGame Game;
+Game game;
 
-bool FrameFunc()
-{
-	float dt=hge->Timer_GetDelta(); //получаем дельту времени
-	Game.frame(dt);
-	return false;
-}
-
-bool RenderFunc()
-{
-	//Рендер графики
-	hge->Gfx_BeginScene();
-	hge->Gfx_Clear(0);
-	Game.render();
-	hge->Gfx_EndScene();
+bool frameFunc() {
+	game.frame();
 
 	return false;
 }
 
-int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
+bool renderFunc(SDL_Renderer* renderer)
 {
-	hge = hgeCreate(HGE_VERSION);
+	SDL_RenderClear(renderer);
 
-	hge->System_SetState(HGE_LOGFILE, "bounce_log");
-	hge->System_SetState(HGE_FRAMEFUNC, FrameFunc);
-	hge->System_SetState(HGE_RENDERFUNC, RenderFunc);
-	hge->System_SetState(HGE_TITLE, "Bounce: Remake");
-	hge->System_SetState(HGE_FPS, 100);
-	hge->System_SetState(HGE_WINDOWED, true);
-	hge->System_SetState(HGE_SCREENWIDTH, 320);
-	hge->System_SetState(HGE_SCREENHEIGHT, 384);
-	hge->System_SetState(HGE_SCREENBPP, 32);
+	game.render();
 
-	if(hge->System_Initiate()) 
-	{	
-		TextureLoad(hge); //Загрузка ресурсов
-		SpriteInit(); //Инициализация спрайтов
-		Game.LoadLevel(); //Загрузка уровня перед запуском игры
-		
-		hge->System_Start(); //Запуск движка
+	SDL_RenderPresent(renderer);
 
-		SpriteTextureDestructor(hge); //Удаление созданных спрайтов и очистка ресурсов
+	return false;
+}
+
+int main() {
+	const int SCREENWIDTH = 320;
+	const int SCREENHEIGHT = 64 + 32 * 8;
+
+	bool quit = false;
+
+	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Window* window = NULL;
+
+	window = SDL_CreateWindow("Bounce: Remake", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREENWIDTH, SCREENHEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+	if(window == NULL) {
+		std::cout << "Main window could not be initialize! SDL_Error " << SDL_GetError() << std::endl;
+		return 1;
 	}
-	hge->System_Shutdown(); 	// Очистка и закрытие
-	hge->Release();
+
+	SDL_Renderer* renderer = NULL;
+
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+	SDL_Event* mainEvent = new SDL_Event();
+
+	EventListener* listener = new EventListener;
+	TextureLoad(renderer);
+	game = Game(renderer);
+	game.loadLevel();
+	game.setEventListener(listener);
+
+	while(!quit && !listener->isQuit()) {
+		listener->listen();
+
+		frameFunc();
+		renderFunc(renderer);
+	}
+
+	SDL_DestroyWindow(window);
+	SDL_DestroyRenderer(renderer);
+	delete mainEvent;
+
 	return 0;
 }
