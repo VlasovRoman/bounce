@@ -16,6 +16,10 @@ Player::Player(Painter* painter) : GameObject(BALL), Sprite(painter) {
 	underWater = false;
 	onJumpGround = false;
 
+	bonusCount[0] = 0;
+	bonusCount[1] = 0;
+	bonusCount[2] = 0;
+
 	killed = false;
 	lives = 3;
 
@@ -92,18 +96,23 @@ void Player::control(EventListener* eventListener) {
 	if(bonusCount[0] > 0) {
 		appliedVelocity = 1.2;
 		bonusCount[0]--;
+		maxVelocity = 4;
 	}
+	else
+		maxVelocity = 2;
 
+	float jumpSpeed = 2.5f;
 	if(bonusCount[1] > 0) {
 		lastBody->SetGravityScale(-1.0f);
 		bonusCount[1]--;
+		jumpSpeed *= -1.0f;
 	}
-	else
+	else {
 		lastBody->SetGravityScale(1.0f);
+	}
 
-	float jumpSpeed = 2.5f;
 	if(bonusCount[2] > 0) {
-		jumpSpeed = 7.5f;
+		jumpSpeed *= 3;
 		bonusCount[2]--;
 	}
 	
@@ -129,7 +138,7 @@ void Player::control(EventListener* eventListener) {
 			velocity += b2Vec2(-appliedVelocity, 0);
 		}
 		if(eventListener->isKeyDown(KEY_UP) && onGround){
-			velocity += b2Vec2(0.0f, -2.5f);
+			velocity += b2Vec2(0.0f, -jumpSpeed);
 		}
 
 		// if(onJumpGround) {
@@ -174,7 +183,7 @@ void Player::setUnderWater(bool is) {
 
 void Player::addBonus(int bonusId) {
 	if(bonusCount[bonusId] == 0) {
-		bonusCount[bonusId] = 60 * 15;
+		bonusCount[bonusId] = 60 * 5;
 	}
 }
 

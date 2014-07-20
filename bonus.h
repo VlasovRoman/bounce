@@ -4,9 +4,9 @@
 #include "gameObject.h"
 
 enum BONUS_TYPE {
-	SPEED,
-	ANTIGRAVITATION,
-	JUMPING
+	BT_SPEED,
+	BT_ANTIGRAVITATION,
+	BT_JUMPING
 };
 
 class Bonus : public GameObject {

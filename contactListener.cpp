@@ -183,10 +183,10 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* manifold) {
 					bonus = dynamic_cast<Bonus*>(object);
 				}
 
-				if(bonus->getType() == SPEED) {
+				if(bonus->getType() == BT_SPEED) {
 					player->addBonus(0);
 				}
-				else if(bonus->getType() == ANTIGRAVITATION) {
+				else if(bonus->getType() == BT_ANTIGRAVITATION) {
 					player->addBonus(1);
 				}
 				else {

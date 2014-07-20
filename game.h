@@ -22,6 +22,7 @@
 #include "pump.h"
 #include "painter.h"
 #include "water.h"
+#include "bonus.h"
 
 using namespace std;
 
@@ -53,6 +54,7 @@ class Game {
 	vector<Pump*>		pumps;
 	vector<Water*>		waterBlocks;
 	vector<Arrow*>		arrows;
+	vector<Bonus*>		bonuses;
 	
 	Player*				player;
 	Portal*				portal;
