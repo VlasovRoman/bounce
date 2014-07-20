@@ -88,6 +88,25 @@ void Player::initBody(b2World* world, float x, float y) {
 }
 
 void Player::control(EventListener* eventListener) {
+	float appliedVelocity = 0.6;
+	if(bonusCount[0] > 0) {
+		appliedVelocity = 1.2;
+		bonusCount[0]--;
+	}
+
+	if(bonusCount[1] > 0) {
+		lastBody->SetGravityScale(-1.0f);
+		bonusCount[1]--;
+	}
+	else
+		lastBody->SetGravityScale(1.0f);
+
+	float jumpSpeed = 2.5f;
+	if(bonusCount[2] > 0) {
+		jumpSpeed = 7.5f;
+		bonusCount[2]--;
+	}
+	
 	// cout << "control" << endl;
 	if(killed) {
 		killedTimeNow++;
@@ -104,10 +123,10 @@ void Player::control(EventListener* eventListener) {
 		b2Vec2 velocity = lastBody->GetLinearVelocity();
 
 		if(eventListener->isKeyDown(KEY_RIGHT) && velocity.x < maxVelocity) {
-			velocity += b2Vec2(+0.6f, 0);
+			velocity += b2Vec2(+appliedVelocity, 0);
 		}
 		if(eventListener->isKeyDown(KEY_LEFT) && velocity.x > -maxVelocity) {
-			velocity += b2Vec2(-0.6f, 0);
+			velocity += b2Vec2(-appliedVelocity, 0);
 		}
 		if(eventListener->isKeyDown(KEY_UP) && onGround){
 			velocity += b2Vec2(0.0f, -2.5f);
@@ -151,6 +170,12 @@ void Player::setOnGround(bool is) {
 
 void Player::setUnderWater(bool is) {
 	underWater = is;
+}
+
+void Player::addBonus(int bonusId) {
+	if(bonusCount[bonusId] == 0) {
+		bonusCount[bonusId] = 60 * 15;
+	}
 }
 
 void Player::birth(bool awake) {

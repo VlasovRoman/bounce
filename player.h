@@ -25,9 +25,11 @@ protected:
 
 	int 				maxVelocity;
 
+	int 				bonusCount[3];
+
 	int 				killedTime;
 	int 				killedTimeNow;
-	short int 	lives;
+	short int 			lives;
 	bool 				onGround;
 	bool				onJumpGround;
 	bool 				underWater;
@@ -46,6 +48,8 @@ public:
 
 	void 			setOnGround(bool is);
 	void 			setOnJumpGround(bool is);
+
+	void			addBonus(int bonusId);
 
 	void 			setUnderWater(bool is);
 
