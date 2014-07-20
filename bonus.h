@@ -5,6 +5,8 @@
 
 enum BONUS_TYPE {
 	SPEED,
+	ANTIGRAVITATION,
+	JUMPING
 };
 
 class Bonus : public GameObject {
