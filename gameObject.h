@@ -1,5 +1,5 @@
-#ifndef DRAWABLE
-#define DRAWABLE
+#ifndef GAME_OBJECT
+#define GAME_OBJECT
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -12,13 +12,15 @@ enum OBJECT_TYPE {
 	BALL,
 	GOAL,
 	PIN,
-	SPIDER,
+	PAUK,
 	LIF,
 	CHECK,
-	WATER,
+	WTR,
 	END_LEVEL,
-	PUMP_TO_BIG,
-	PUMP_TO_SMALL,
+	PUMPILA,
+	BONUS_SPPED,
+	//...
+	DIRECTION
 };
 
 class GameObject : public iDynamicBody{

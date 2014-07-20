@@ -1,32 +1,30 @@
 #include <iostream>
 
-#include "ResInit.h"
+#include <SDL2/SDL.h>
+
 #include "game.h"
+#include "painter.h"
 
-Game game;
+// bool frameFunc() {
+// 	game.frame();
 
-bool frameFunc() {
-	game.frame();
+// 	return false;
+// }
 
-	return false;
-}
+// bool renderFunc(Painter* painter)
+// {
+// 	painter->clear();
 
-bool renderFunc(SDL_Renderer* renderer)
-{
-	SDL_RenderClear(renderer);
+// 	game.render();
 
-	game.render();
+// 	painter->present();
 
-	SDL_RenderPresent(renderer);
-
-	return false;
-}
+// 	return false;
+// }
 
 int main() {
 	const int SCREENWIDTH = 320;
 	const int SCREENHEIGHT = 64 + 32 * 8;
-
-	bool quit = false;
 
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_Window* window = NULL;
@@ -41,24 +39,33 @@ int main() {
 
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-	SDL_Event* mainEvent = new SDL_Event();
-
 	EventListener* listener = new EventListener;
-	TextureLoad(renderer);
-	game = Game(renderer);
+
+	Painter* painter = new Painter(renderer);
+	painter->initTextures();
+
+	Game game(painter);
+
 	game.loadLevel();
 	game.setEventListener(listener);
 
-	while(!quit && !listener->isQuit()) {
+	while(!listener->isQuit()) {
 		listener->listen();
 
-		frameFunc();
-		renderFunc(renderer);
+		game.frame();
+
+		painter->clear();
+
+		game.render();
+
+		painter->present();
 	}
 
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
-	delete mainEvent;
+
+	delete listener;
+	delete painter;
 
 	return 0;
 }

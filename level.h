@@ -7,24 +7,24 @@
 #include <iostream>
 #include "camera.h"
 #include "sprite.h"
+#include "tile.h"
 
 using namespace std;
 
 class Level {
-	int** 				map;
-	SDL_Renderer*		renderer;
-	Camera*				camera;
+	Painter* 			painter;
+	
+	Tile** 				map;
 	int 				width, height;
 	int 				tileWidth, tileHeight;
-	Sprite				sprites[5]; //TODO
 public:
 	Level();
-	Level(SDL_Renderer* renderer, Camera* camera);
+	Level(Painter* painter);
 
 	bool			loadFromFile(std::string name);
 	void 			clear();
 
-	int**			getMap();
+	Tile**			getMap();
 
 	b2Vec2			getMapSize();
 

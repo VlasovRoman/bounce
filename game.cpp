@@ -1,66 +1,51 @@
 #include "game.h"
 
-#include <Box2D/Box2D.h>
-#include <SDL2/SDL.h>
-#include "player.h"
-#include "wall.h"
-// #include "levels.h"
-#include "ResInit.h"
-#include "eventListener.h"
 #include <iostream>
-#include "spike.h"
 #include "level.h"
-#include "camera.h"
-#include "checkpoint.h"
 
 using namespace std;
 
-Game::Game(SDL_Renderer* renderer)
+Game::Game(Painter* painter)
 {
-	gravity = b2Vec2(0.0f, 6.0f);
-	world = new b2World(gravity);
-
-
-	timeStep = 1.0f / 60.0f;
-	velocityIterations = 6;
-	positionIterations = 2;
-	cout << "Simulation parametres is seted" << endl;
 	camera = new Camera;
-	
-	cout << "World created " << endl;
-	player = new Player(renderer, camera);
-	
-	eventListener = NULL;
-	contactListener = new ContactListener;
-	world->SetContactListener(contactListener);
-	contactListener->setPlayer(player);
-	cout << "Listeners initialized" << endl;
-
 	camera->x = 0;
 	camera->y = 0;
 	camera->width = 320;
 	camera->height = 32 * 8;
-	this->renderer = renderer;
-	cout << "Set renderer and camera" << endl;
 
-	level = Level(renderer, camera);
-	cout << "Level initialized" << endl;
+	this->painter = painter;
+	painter->setCamera(camera);
 
-	cout << "Player created" << endl;
-	player->setExplosionTexture(fail_tex);
-	player->setPlayerTexture(ball_tex);
-	cout << "Player textures init" << endl;
+	gravity = b2Vec2(0.0f, 6.0f);
+	world = new b2World(gravity);
 
-	portal = new Portal(renderer, camera);
-	portal->setActiveTexture(loadTexture("resources/portalActive.png", renderer));
-	portal->setLockedTexture(loadTexture("resources/portalLocked.png", renderer));
+	timeStep = 1.0f / 60.0f;
+	velocityIterations = 6;
+	positionIterations = 2;
 
+	// player->initBody(world, 0, 0);
+
+	portal = NULL;
+
+	// player = NULL;
+	player = new Player(painter);
+	// player->initBody(world, -100 * 32, -100 * 32);
+
+	eventListener = NULL;
+
+	contactListener = new ContactListener;
+	contactListener->setPlayer(player);
+
+	// world->SetContactListener(contactListener);
+
+	level = Level(painter);
 	levelId = 1;
 
-	bLoadLevel = false;
+	gui = new Gui(painter);
 
-	gui = new Gui(renderer);
-	gui->initSprites();
+	levelsName[0] = "resources/level3.tmx";
+	levelsName[1] = "resources/level2.tmx";
+	levelsName[2] = "resources/level3.tmx";
 }
 
 void Game::createWorld() {
@@ -72,7 +57,7 @@ void Game::setEventListener(EventListener* listener) {
 }
 
 void Game::renderGui() {
-	
+
 }
 
 void Game::frame() {
@@ -80,6 +65,19 @@ void Game::frame() {
 		levelId++;
 		loadLevel();
 	}
+
+	// cout << contactListener->getPlayerState() << endl;
+
+	if(contactListener->getPlayerState() > 0)
+		player->inflate();
+	if(contactListener->getPlayerState() < 0)  {
+		// cout << "Blowing..." << endl;
+		player->blowAway();
+	}
+
+	contactListener->readingToNewFrame();
+
+
 	if(player->getDeath()) {
 		levelId = 1;
 		loadLevel();
@@ -100,37 +98,53 @@ void Game::frame() {
 		}
 	}
 
+	for(int i = 0; i < spiders.size(); i++) {
+		spiders[i]->frame();
+	}
+
 	player->control(eventListener);
 
 	b2Vec2 playerPos = player->getBody()->GetPosition();
 	playerPos.x *= 100;
 	playerPos.y *= 100;
 
+	int cameraLevel = (int)playerPos.y / 32 / 7;
+
+	camera->y = 7 * cameraLevel * 32;
+
 	if(playerPos.x > camera->width / 2) {
 		camera->x = playerPos.x - camera->width / 2 + 16;
 	}
 
-	if(ringsNumber == 0)
-		portal->setActive();
+	// if(ringsNumber == 0)
+	// 	portal->setActive();
 
 	world->Step(timeStep, velocityIterations, positionIterations);
 }
 
 void Game::render()	{
 	level.draw();
+
 	for(int i = 0; i < checkpoints.size(); i++) {
 		checkpoints[i]->draw();
 	}
+
 	for(int i = 0; i < rings.size(); i++) {
-		rings[i]->draw(RIGHT);
+		rings[i]->draw(true);
 	}
+
 	player->draw();
+
 	for(int i = 0; i < rings.size(); i++) {
-		rings[i]->draw(LEFT);
+		rings[i]->draw(false);
 	}
 
 	for(int i = 0; i < lifes.size(); i++) {
 		lifes[i]->draw();
+	}
+
+	for(int i = 0; i < spiders.size(); i++) {
+		spiders[i]->draw();
 	}
 
 	portal->draw();
@@ -139,9 +153,11 @@ void Game::render()	{
 
 void Game::loadLevel()
 {
-	level = Level(renderer, camera);
+	string levelName = levelsName[levelId - 1];
 
-	if(!level.loadFromFile("resources/level1.tmx")) {
+	level.clear();
+
+	if(!level.loadFromFile(levelName)) {
 		cout << "level not loaded" << endl;
 	}
 
@@ -151,78 +167,237 @@ void Game::loadLevel()
     spikes.clear();
     checkpoints.clear();
     rings.clear();
+    lifes.clear();
+    spiders.clear();
+    pumps.clear();
+    // waterBlocks.clear();
 
-    delete world;
+    int lives = 0;
+
+	// if(player != NULL) {
+ //    	lives = player->getLives();
+ //    	if(lives == 0) {
+ //    		lives -= 3;
+ //    	}
+	// 	player->destroyBody();
+	// 	delete player;
+	// // }
+	// player = NULL;
+
+	if(portal != NULL)
+		delete portal;
+
+    if(world != NULL) {
+    	delete world;
+    }
+
     world = new b2World(gravity);
     world->SetContactListener(contactListener);
-
+    player->initBody(world, -10 * 32, -10 * 32);
 
 	for(int y = 0; y < level.getMapSize().y; y++)
 	{
 		for(int x = 0; x < level.getMapSize().x; x++)
 		{
-			switch(map[x][y])
+			if(map[x][y].environment == TE_WATER) {
+				Water* water = new Water();
+				water->initBody(world, x * 32, y * 32);
+				waterBlocks.push_back(water);
+			}
+
+			switch(map[x][y].object)
 			{
-			case 1:
+			case TO_WALL_SOLID:
 				{
-				    Wall* wall = new Wall();
+				    Wall* wall = new Wall(SOLID);
 				    wall->initBody(world, x * 32, y * 32);
 				    walls.push_back(wall);
 				} break;
-			case 2:
+			case TO_WALL_DOWN_LEFT_EDGE:
 				{
-					player->initBody(world, x * 32 + 32, y * 32);
-					player->birth(true);
+				    Wall* wall = new Wall(DOWN_LEFT_EDGE);
+				    wall->initBody(world, x * 32, y * 32);
+				    walls.push_back(wall);
 				} break;
-			case 3: 
+			case TO_WALL_DOWN_RIGHT_EDGE:
 				{
+				    Wall* wall = new Wall(DOWN_RIGHT_EDGE);
+				    wall->initBody(world, x * 32, y * 32);
+				    walls.push_back(wall);
+				} break;
+			case TO_WALL_UP_RIGHT_EDGE:
+				{
+				    Wall* wall = new Wall(UP_RIGHT_EDGE);
+				    wall->initBody(world, x * 32, y * 32);
+				    walls.push_back(wall);
+				} break;
+			case TO_WALL_UP_LEFT_EDGE:
+				{
+				    Wall* wall = new Wall(UP_LEFT_EDGE);
+				    wall->initBody(world, x * 32, y * 32);
+				    walls.push_back(wall);
+				} break;
+			case TO_JUMP_WALL:
+				{
+					Wall* wall = new Wall(SOLID, true);
+				    wall->initBody(world, x * 32, y * 32);
+				    walls.push_back(wall);
+				}break;
+			case TO_SPAWN:
+				{
+					// player = new Player(painter);
+					// player->initBody(world, x * 32, y * 32);
+					player->setCheckpoint(b2Vec2(x * 32 * 0.01f, y * 32 * 0.01f));
+					if(levelId == 1)
+						player->birth(true);
+					else
+						player->birth(false);
+				} break;
+			case TO_PORTAL:
+				{
+					portal = new Portal(painter);
 					portal->initBody(world, x * 32, y * 32);
 				} break;
-			case 4:
+			case TO_SPIKE:
 				{
 				    Spike* spike = new Spike();
+				    spike->setDirection(map[x][y].modification);
 				    spike->initBody(world, x * 32, y * 32);
 				    spikes.push_back(spike);
+				    // map[x][y].modification = TM_NONE;
 				} break;
-			case 5: 
+			case TO_CHECKPOINT:
 				{
-					Checkpoint* chk = new Checkpoint(renderer, camera);
-					chk->setOnTexture(onCheckpoint_tex);
-					chk->setOffTexture(offCheckpoint_tex);
+					Checkpoint* chk = new Checkpoint(painter);
 				    chk->initBody(world, x * 32, y * 32);
-				    checkpoints.push_back(chk);	
+				    checkpoints.push_back(chk);
 				} break;
-			case 6: 
+			case TO_RING_SMALL_VERT:
 				{
-					Ring* ring = new Ring(renderer, camera);
-					ring->init(VERTICALE, SMALL);
-					ring->setOnTexture(onRingRight_tex, onRingLeft_tex);
-					ring->setOffTexture(offRingRight_tex, offRingLeft_tex);
+					Ring* ring = new Ring(painter);
+					ring->init(true, false);
 				    ring->initBody(world, x * 32, y * 32);
-				    rings.push_back(ring);	
+				    rings.push_back(ring);
 				} break;
-			case 7: 
+			case TO_RING_BIG_VERT:
 				{
-					Ring* ring = new Ring(renderer, camera);
-					ring->init(HORIZONTALE, SMALL);
-					ring->setOnTexture(onRingRightHor_tex, onRingLeftHor_tex);
-					ring->setOffTexture(offRingRightHor_tex, offRingLeftHor_tex);
+					Ring* ring = new Ring(painter);
+					ring->init(true, true);
 				    ring->initBody(world, x * 32, y * 32);
-				    rings.push_back(ring);	
+				    rings.push_back(ring);
 				} break;
-			case 8: 
+			case TO_RING_SMALL_HOR:
 				{
-					Life* life = new Life(renderer, camera);
-					life->setTexture(life_tex);
+					Ring* ring = new Ring(painter);
+					ring->init(false, false);
+				    ring->initBody(world, x * 32, y * 32);
+				    rings.push_back(ring);
+				} break;
+			case TO_LIFE:
+				{
+					Life* life = new Life(painter);
 				    life->initBody(world, x * 32, y * 32);
 				    lifes.push_back(life);
 				} break;
+
+			case TO_SPIDER_1:
+				{
+					if(map[x + 1][y].object == TO_SPIDER_2) {
+						Spider* spider = new Spider(painter);
+						spider->setWhole(true);
+						spider->initBody(world, x * 32, y * 32);
+						spiders.push_back(spider);
+					}
+					else {
+						Spider* spider = new Spider(painter);
+						spider->setWhole(false, false);
+						spider->initBody(world, x * 32, y * 32);
+						spiders.push_back(spider);
+					}
+				} break;
+			case TO_SPIDER_2 : 
+				{
+					if(map[x - 1][y].object != TO_SPIDER_1) {
+						Spider* spider = new Spider(painter);
+						spider->setWhole(false, true);
+						spider->initBody(world, x * 32, y * 32);
+						spiders.push_back(spider);
+					}
+				} break;
+			case TO_PUMP_INFLATOR:
+				{
+					Pump* pump = new Pump(INFLATOR);
+				    pump->initBody(world, x * 32, y * 32);
+				    pumps.push_back(pump);
+				} break;
+			case TO_PUMP_OUTPUT:
+				{
+					Pump* pump = new Pump(OUTPUT);
+				    pump->initBody(world, x * 32, y * 32);
+				    pumps.push_back(pump);
+				} break;
+			}
+
+			if(map[x][y].modification != TM_NONE) {
+				if(map[x][y].object != TO_SPIKE || map[x][y].object != TO_PUMP_OUTPUT || map[x][y].object != TO_PUMP_INFLATOR) {
+
+					switch(map[x][y].modification)
+					{
+					case TM_UP:
+						{
+						    Arrow* arrow = new Arrow(AT_UP);
+						    arrow->initBody(world, x * 32, y * 32);
+						    arrows.push_back(arrow);
+						} break;
+					case TM_RIGHT:
+						{
+						    Arrow* arrow = new Arrow(AT_RIGHT);
+						    arrow->initBody(world, x * 32, y * 32);
+						    arrows.push_back(arrow);
+						} break;
+					case TM_DOWN:
+						{
+						    Arrow* arrow = new Arrow(AT_DOWN);
+						    arrow->initBody(world, x * 32, y * 32);
+						    arrows.push_back(arrow);
+						} break;
+					case TM_LEFT:
+						{
+						    Arrow* arrow = new Arrow(AT_LEFT);
+						    arrow->initBody(world, x * 32, y * 32);
+						    arrows.push_back(arrow);
+						} break;
+					}
+				}
 			}
 		}
 	}
 
-	ringsNumber = rings.size();
+	// player->addLifes(lives);
+	// player->inflate();
 
-	cout << "Game objects created" << endl;
-	bLoadLevel = false;
+	contactListener->setPlayer(player);
+
+	ringsNumber = rings.size();
+}
+
+Game::~Game() {
+	// walls.clear();
+ //    spikes.clear();
+ //    checkpoints.clear();
+ //    rings.clear();
+ //    lifes.clear();
+ //    // spiders.clear();
+ //    // pumps.clear();
+
+	// delete 	player;
+	// delete 	portal;
+	// delete 	contactListener;
+	// eventListener = NULL;
+	// painter = NULL;
+	// camera = NULL;
+	// delete 	gui;
+	// delete 	world;
+
+	cout << "Game cleared" << endl;
 }

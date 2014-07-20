@@ -1,14 +1,12 @@
 #include "life.h"
-#include <iostream>
 
-Life::Life(SDL_Renderer* renderer, Camera* camera) : GameObject(LIF), Sprite(renderer) {
-	this->camera = camera;
+Life::Life(Painter* painter) : GameObject(LIF), Sprite(painter) {
 	deleted = false;
 }
 
 void Life::initBody(b2World* world, float x, float y) {
 	bodyDef.type = b2_staticBody;
-	bodyDef.position = b2Vec2(x * 0.01f, y * 0.01f);
+	bodyDef.position = b2Vec2((x + 16) * 0.01f, (y + 16) * 0.01f);
 	bodyDef.fixedRotation = true;
 	bodyDef.userData = this;
 
@@ -21,7 +19,7 @@ void Life::initBody(b2World* world, float x, float y) {
 }
 
 void Life::draw() {
-	Sprite::drawTexture(body->GetPosition().x * 100 - camera->x, body->GetPosition().y * 100 - camera->y);
+	painter->drawLife(body->GetPosition().x * 100 - 16, body->GetPosition().y * 100 - 16);
 }
 
 void Life::setDelete() {

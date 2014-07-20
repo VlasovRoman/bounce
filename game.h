@@ -1,9 +1,9 @@
 #ifndef H_CLASS_GAME
 #define H_CLASS_GAME
 
-#include <SDL2/SDL.h>
 #include <Box2D/Box2D.h>
 #include <vector>
+#include <string>
 
 #include "player.h"
 #include "wall.h"
@@ -15,7 +15,13 @@
 #include "checkpoint.h"
 #include "ring.h"
 #include "gui.h"
+#include "tile.h"
 #include "life.h"
+#include "spider.h"
+#include "arrow.h"
+#include "pump.h"
+#include "painter.h"
+#include "water.h"
 
 using namespace std;
 
@@ -31,11 +37,11 @@ class Game {
 	ContactListener*	contactListener;
 
 	//Renderers
-	SDL_Renderer* 		renderer;
+	Painter*			painter;
 	Camera*				camera;
 	
 	Level 				level;
-	int**				map;
+	Tile**				map;
 
 	vector<Wall*> 		walls; 
 	vector<Spike*>		spikes; //ñïèñîê øèïîâ
@@ -43,21 +49,27 @@ class Game {
 	vector<Ring*>		rings;
 	int 				ringsNumber;
 	vector<Life*>		lifes;
+	vector<Spider*> 	spiders;
+	vector<Pump*>		pumps;
+	vector<Water*>		waterBlocks;
+	vector<Arrow*>		arrows;
 	
 	Player*				player;
 	Portal*				portal;
 
 	Gui* 				gui;
 
+	string 				levelsName[3];
 
 	int 				levelId;
-	bool 				bLoadLevel;
 
 	void 				createWorld();
 	void 				renderGui();
 public:
-	Game(){};
-	Game(SDL_Renderer* renderer);
+	Game();
+	Game(Painter* painter);
+
+	~Game();
 	
 	void 			frame();
 	void 			render();

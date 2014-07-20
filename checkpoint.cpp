@@ -1,14 +1,13 @@
 #include "checkpoint.h"
 #include <iostream>
 
-Checkpoint::Checkpoint(SDL_Renderer* renderer, Camera* camera) : GameObject(CHECK), Sprite(renderer) {
+Checkpoint::Checkpoint(Painter* painter) : GameObject(CHECK), Sprite(painter) {
 	active = false;
-	this->camera = camera;
 }
 
 void Checkpoint::initBody(b2World* world, float x, float y) {
 	bodyDef.type = b2_staticBody;
-	bodyDef.position = b2Vec2(x * 0.01f, y * 0.01f);
+	bodyDef.position = b2Vec2((x + 16) * 0.01f, (y + 16) * 0.01f);
 	bodyDef.fixedRotation = true;
 	bodyDef.userData = this;
 
@@ -27,14 +26,6 @@ void Checkpoint::initBody(b2World* world, float x, float y) {
 	body->CreateFixture(&shape, 1.0f);
 }
 
-void Checkpoint::setOnTexture(SDL_Texture* texture) {
-	onTexture = texture;
-}
-
-void Checkpoint::setOffTexture(SDL_Texture* texture) {
-	offTexture = texture;
-}
-
 bool Checkpoint::getActive() {
 	return active;
 }
@@ -44,12 +35,8 @@ void Checkpoint::setActive(bool active) {
 }
 
 void Checkpoint::draw() {
-	if(active) {
-		Sprite::setTexture(onTexture);
-		drawTexture(body->GetPosition().x * 100 - camera->x, body->GetPosition().y * 100 - camera->y);
-	}
-	else {
-		Sprite::setTexture(offTexture);
-		drawTexture(body->GetPosition().x * 100 - camera->x, body->GetPosition().y * 100 - camera->y);
-	}
+	float x = body->GetPosition().x * 100;
+	float y = body->GetPosition().y * 100;
+
+	painter->drawCheckpoint(x - 16, y - 16, active);
 }

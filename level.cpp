@@ -2,38 +2,39 @@
 #include <TmxParser/Tmx.h>
 #include <tinyxml.h>
 #include <Box2D/Box2D.h>
-#include "ResInit.h"
 
 using namespace std;
 
 Level::Level() {
-	this->renderer = NULL;
+	this->painter = NULL;
 }
 
-Level::Level(SDL_Renderer* renderer, Camera* camera) {
-	this->renderer = renderer;
-    this->camera = camera;
-
-    for(int i = 0; i < 5; i++) {
-        sprites[i] = Sprite(renderer);
-    }
-
-    sprites[0].setTexture(space_tex);
-    sprites[1].setTexture(wall_tex);
-    sprites[2].setTexture(space_tex);
-    sprites[4].setTexture(spike_tex);
+Level::Level(Painter* painter) {
+	this->painter = painter;
+    map = NULL;
 }
 
 void Level::clear() {
-    for(int x = 0; x < width; x++){
-        for(int y = 0; y < height; y++) {
-           map[x][y] = 0;
-        }   
+    if(map != NULL) {
+        for(int x = 0; x < width; x++){
+            for(int y = 0; y < height; y++) {
+               map[x][y].environment = TE_NONE;
+               map[x][y].object = TO_NONE;
+               map[x][y].modification = TM_NONE;
+            }
+        }
     }
 }
 
 bool Level::loadFromFile(std::string _name) {
-	TiXmlDocument levelFile(_name.c_str());
+    if(map != NULL) {
+        for(int x = 0; x < width; x++){
+            delete [] map[x];
+        }
+        delete [] map;
+    }
+    map = NULL;
+    TiXmlDocument levelFile(_name.c_str());
 
     // Загружаем XML-карту
     if(!levelFile.LoadFile())
@@ -53,12 +54,15 @@ bool Level::loadFromFile(std::string _name) {
     tileWidth = atoi(tileMap->Attribute("tilewidth"));
     tileHeight = atoi(tileMap->Attribute("tileheight"));
 
-    cout << width << " " << height << endl;
+    // cout << width << " " << height << endl;
 
-    map = new int*[width];
+
+    map = new Tile*[width];
     for(int i = 0; i < width; i++) {
-    	map[i] = new int[height];
+    	map[i] = new Tile[height];
     }
+
+    clear();
     // // Работа со слоями
     TiXmlElement *layerElement;
     layerElement = tileMap->FirstChildElement("layer");
@@ -67,6 +71,7 @@ bool Level::loadFromFile(std::string _name) {
 
         // Контейнер <data>
         TiXmlElement *layerDataElement;
+        string  layerName = layerElement->Attribute("name");
         layerDataElement = layerElement->FirstChildElement("data");
 
         if(layerDataElement == NULL)
@@ -89,36 +94,18 @@ bool Level::loadFromFile(std::string _name) {
 
         while(tileElement)
         {
+
             int tileGID = atoi(tileElement->Attribute("gid"));
             // int subRectToUse = tileGID - firstTileID;
-            switch(tileGID){
-                case 4: {
-                    map[x][y] = 1;
-                } break;
-                case 1: {
-                    map[x][y] = 2;
-                } break;
-                case 3: {
-                    map[x][y] = 0;
-                } break;
-                case 2: {
-                    map[x][y] = 3;
-                } break;
-                case 5: {
-                    map[x][y] = 4;
-                } break;
-                case 7: {
-                    map[x][y] = 5;
-                } break;
-                case 9: {
-                    map[x][y] = 6;
-                }break;
-                case 10: {
-                    map[x][y] = 7;
-                }break;
-                case 11: {
-                    map[x][y] = 8;
-                }break;
+
+            if(layerName == "environment") {
+                map[x][y].environment = (TILE_ENVIRONMENT)tileGID;
+            }
+            if(layerName == "objects") {
+                map[x][y].object = (TILE_OBJECT)tileGID;
+            }
+            if(layerName == "modifications") {
+                map[x][y].modification = (TILE_MODIFICATION)tileGID;
             }
 
             tileElement = tileElement->NextSiblingElement("tile");
@@ -137,9 +124,10 @@ bool Level::loadFromFile(std::string _name) {
     }
 
     return true;
+
 }
 
-int** Level::getMap() {
+Tile** Level::getMap() {
     return map;
 }
 
@@ -150,15 +138,44 @@ b2Vec2 Level::getMapSize() {
 void Level::draw() {
     for(int y = 0; y < height; y++){
         for(int x = 0; x < width; x++) {
-            int id = map[x][y];
+            Tile tile = map[x][y];
+            
+            if(tile.environment == TE_AIR) {
+                painter->drawSpace(x * 32, y * 32);
+            }
+            if(tile.environment == TE_WATER) {
+                painter->drawWater(x * 32, y * 32);
+            }
 
-            if(id == 5 || id == 6 || id == 7 || id == 8)
-                id = 0;
-
-            if(id == 4)
-                sprites[0].draw((x * 32) - camera->x, (y * 32) - camera->y);
-
-            sprites[id].draw((x * 32) - camera->x, (y * 32) - camera->y);
+            if(tile.object == TO_WALL_SOLID) {
+                painter->drawWall(x * 32, y * 32, 0);
+            }
+            if(tile.object == TO_WALL_DOWN_RIGHT_EDGE) {
+                painter->drawWall(x * 32, y * 32, 2);
+            }
+            if(tile.object == TO_WALL_DOWN_LEFT_EDGE) {
+                painter->drawWall(x * 32, y * 32, 1);
+            }
+            if(tile.object == TO_WALL_UP_RIGHT_EDGE) {
+                painter->drawWall(x * 32, y * 32, 4);
+            }
+            if(tile.object == TO_WALL_UP_LEFT_EDGE) {
+                painter->drawWall(x * 32, y * 32, 3);
+            }
+            if(tile.object == TO_PUMP_INFLATOR) {
+                painter->drawPump(x * 32, y * 32, true, map[x][y].modification);
+            }
+            if(tile.object == TO_PUMP_OUTPUT) {
+                painter->drawPump(x * 32, y * 32, false, map[x][y].modification);
+            }
+            if(tile.object == TO_SPIKE) {
+                painter->drawSpike(x * 32, y * 32, map[x][y].modification);
+            }
+            if(tile.object == TO_JUMP_WALL) {
+                // cout << "rednerer" << endl;
+                painter->drawJumpWall(x * 32, y * 32);
+            }
+            // painter->drawJumpWall(5 * 32, 5 * 32);
         }
     }
 }

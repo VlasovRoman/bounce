@@ -1,26 +1,16 @@
 #ifndef SPRITE
 #define SPRITE
 
-#include <SDL2/SDL.h>
-#include <iostream>
-#include "camera.h"
+#include "painter.h"
 
 class Sprite {
 protected:
-	SDL_Texture* 	texture;
-	SDL_Renderer*	renderer;
-
-	void 			drawTexture(float x, float y);
+	Painter*		painter;
 public:
-	///API 1
-	Sprite(SDL_Renderer* renderer = NULL);
+	Sprite(Painter* painter = NULL);
 	virtual ~Sprite();
 
-	virtual void 	setTexture(SDL_Texture* texture);
-
-	void 			draw(float x, float y);
-	///API 2
-	void 			loadTexture(std::string name);
+	virtual	void draw() = 0;
 };
 
 #endif

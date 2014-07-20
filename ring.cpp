@@ -1,35 +1,36 @@
 #include "ring.h"
 #include <iostream>
 
-Ring::Ring(SDL_Renderer* renderer, Camera* camera) : GameObject(GOAL), Sprite(renderer) {
+Ring::Ring(Painter* painter) : GameObject(GOAL), Sprite(painter) {
 	active = true;
-	this->camera = camera;
 }
 
-void Ring::init(RING_ORIENTATION orientation, RING_TYPE type) {
-	this->orientation = orientation;
-	this->type = type;
+void Ring::init(bool isVert, bool isBig) {
+	this->isVert = isVert;
+	this->isBig = isBig;
 }
 
 void Ring::initBody(b2World* world, float x, float y) {
-	if(orientation == VERTICALE) {
+	if(isVert) {
 		bodyDef.type = b2_staticBody;
-		bodyDef.position = b2Vec2(x * 0.01f, y * 0.01f);
+		bodyDef.position = b2Vec2((x + 16) * 0.01f, (y + 32) * 0.01f);
 		bodyDef.fixedRotation = true;
 		bodyDef.userData = this;
 
 		b2PolygonShape shape;
-	
-		shape.SetAsBox(16 * 0.01f, 32 * 0.01f);
+		
+		if(!isBig)
+			shape.SetAsBox(10 * 0.01f, 20 * 0.01f);
+		else
+			shape.SetAsBox(16 * 0.01f, 32 * 0.01f);
 
 		body = world->CreateBody(&bodyDef);
 
 		body->CreateFixture(&shape, 1.0f);
 	}
-	if (orientation == HORIZONTALE)
-	{
+	else {
 		bodyDef.type = b2_staticBody;
-		bodyDef.position = b2Vec2(x * 0.01f, y * 0.01f);
+		bodyDef.position = b2Vec2((x + 32) * 0.01f, (y + 16) * 0.01f);
 		bodyDef.fixedRotation = true;
 		bodyDef.userData = this;
 
@@ -41,38 +42,38 @@ void Ring::initBody(b2World* world, float x, float y) {
 
 		body->CreateFixture(&shape, 1.0f);
 
-		if(type == SMALL) {
-			float boxSize = 0.3f;
+		if(!isBig) {
+			// float boxSize = 0.3f;
 
-			firstBodyDef.type = b2_staticBody;
-			firstBodyDef.position = b2Vec2((x - 10) * 0.01f, (y + 2) * 0.01f);
-			firstBodyDef.fixedRotation = true;
-			firstBodyDef.userData = NULL;
+			// firstBodyDef.type = b2_staticBody;
+			// firstBodyDef.position = b2Vec2((x - 10) * 0.01f, (y + 2) * 0.01f);
+			// firstBodyDef.fixedRotation = true;
+			// firstBodyDef.userData = NULL;
 
-			b2PolygonShape firstShape;
+			// b2PolygonShape firstShape;
 		
-			firstShape.SetAsBox(boxSize * 0.01f, boxSize * 0.01f);
+			// firstShape.SetAsBox(boxSize * 0.01f, boxSize * 0.01f);
 
-			firstBody = world->CreateBody(&firstBodyDef);
+			// firstBody = world->CreateBody(&firstBodyDef);
 
-			firstBody->CreateFixture(&firstShape, 1.0f);
+			// firstBody->CreateFixture(&firstShape, 1.0f);
 
 
 
-			secondBodyDef.type = b2_staticBody;
-			secondBodyDef.position = b2Vec2((x + 64 - 18) * 0.01f, y * 0.01f);
-			secondBodyDef.fixedRotation = true;
-			secondBodyDef.userData = NULL;
+			// secondBodyDef.type = b2_staticBody;
+			// secondBodyDef.position = b2Vec2((x + 64 - 18) * 0.01f, y * 0.01f);
+			// secondBodyDef.fixedRotation = true;
+			// secondBodyDef.userData = NULL;
 
-			b2PolygonShape secondShape;
+			// b2PolygonShape secondShape;
 		
-			secondShape.SetAsBox(boxSize * 0.01f, boxSize * 0.01f);
+			// secondShape.SetAsBox(boxSize * 0.01f, boxSize * 0.01f);
 
-			secondBody = world->CreateBody(&secondBodyDef);
+			// secondBody = world->CreateBody(&secondBodyDef);
 
-			secondBody->CreateFixture(&secondShape, 1.0f);
+			// secondBody->CreateFixture(&secondShape, 1.0f);
 		}
-		if (type == BIG) {
+		else{
 			//TODO
 		}
 	}
@@ -93,18 +94,20 @@ void Ring::initBody(b2World* world, float x, float y) {
 	// firstBody->CreateFixture(&firstShape, 1.0f);
 }
 
-RING_ORIENTATION Ring::getOrientation() {
-	return orientation;
+// bool Ring::isPlayerShiftChanged(b2Vec2 playerPosition) {
+// 	b2Vec2 shiftNow = body->GetPosition() - playerPosition;
+
+// 	// if(lastPlayerShift.x < 0 {
+
+// 	// }
+// }
+
+bool Ring::getBig() {
+	return isBig;
 }
 
-void Ring::setOnTexture(SDL_Texture* right, SDL_Texture* left) {
-	onTextureRight = right;
-	onTextureLeft = left;
-}
-
-void Ring::setOffTexture(SDL_Texture* right, SDL_Texture* left) {
-	offTextureRight = right;
-	offTextureLeft = left;
+bool Ring::getOrientation() {
+	return isVert;
 }
 
 void Ring::diactivate() {
@@ -115,29 +118,27 @@ bool Ring::isActive() {
 	return active;
 }
 
-void Ring::draw(RING_PART part) {
+void Ring::draw(bool drawRightPart) {
 	float x, y;
 	x = body->GetPosition().x * 100;
 	y = body->GetPosition().y * 100;
 
-	if(part == RIGHT) {
-		if(active) {
-			Sprite::setTexture(onTextureRight);
-			drawTexture(x - camera->x, y - camera->y);
-		}
-		else {
-			Sprite::setTexture(offTextureRight);
-			drawTexture(x - camera->x, y - camera->y);
-		}
+	if(isVert) {
+		x -= 16;
+		y -= 32;
 	}
-	if(part == LEFT)  {
-		if(active) {
-			Sprite::setTexture(onTextureLeft);
-			drawTexture(x - camera->x, y - camera->y);
-		}
-		else {
-			Sprite::setTexture(offTextureLeft);
-			drawTexture(x - camera->x, y - camera->y);
-		}
+	else {
+		// x += 16;
+		x -= 16;
+		y -= 32;
+		// x -= 16;
+		// y -= 32;
 	}
+
+	painter->drawRing(x, y, isBig, drawRightPart, isVert ,active);
+	
+}
+
+void Ring::draw() {
+
 }
