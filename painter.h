@@ -12,7 +12,7 @@ class Painter {
 	SDL_Renderer*	renderer;
 	Camera*			camera;
 
-	SDL_Texture* 		textures[27];
+	SDL_Texture* 		textures[30];
 	//Ball:  	2 textures 			[0..1]
 	//Wall:		5 textures //TODO 	[2] & [19..22]
 	//Space: 	1 textures 			[3]
@@ -26,6 +26,7 @@ class Painter {
 	//Pump:		2 textures 			[23..24]
 	//Water:	1 textures			[25]
 	//JumpWall	1 textures 			[26]
+	//Bonuses:	3 textures 			[27..29]
 
 	SDL_Texture* 	loadTexture(string nameOfTexture);
 
@@ -54,6 +55,7 @@ public:
 	void 		drawSpider(float x, float y, int partNumber);
 	void 		drawPump(float x, float y, bool inflator, int directionId);
 	void 		drawJumpWall(float x, float y);
+	void 		drawBonus(float x, float y, int bonusTypeId, int directionId);
 
 	void 		drawGuiBase(float x, float y);
 	void 		drawGuiLive(float x, float y);
