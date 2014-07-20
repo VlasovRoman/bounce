@@ -25,7 +25,7 @@ class Painter {
 	//Spider:	1 textures 			[18]
 	//Pump:		2 textures 			[23..24]
 	//Water:	1 textures			[25]
-	//JumpWall	1 textures 			[26]
+	//JumpWall	5 textures 			[26] & [30..33]
 	//Bonuses:	3 textures 			[27..29]
 
 	SDL_Texture* 	loadTexture(string nameOfTexture);
@@ -54,7 +54,7 @@ public:
 	void 		drawRing(float x, float y, bool isBig, bool isRight, bool isVert, bool active);
 	void 		drawSpider(float x, float y, int partNumber);
 	void 		drawPump(float x, float y, bool inflator, int directionId);
-	void 		drawJumpWall(float x, float y);
+	void 		drawJumpWall(float x, float y, int type);
 	void 		drawBonus(float x, float y, int bonusTypeId, int directionId);
 
 	void 		drawGuiBase(float x, float y);
