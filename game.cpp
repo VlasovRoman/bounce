@@ -170,7 +170,8 @@ void Game::loadLevel()
     lifes.clear();
     spiders.clear();
     pumps.clear();
-    // waterBlocks.clear();
+    waterBlocks.clear();
+    bonuses.clear();
 
     int lives = 0;
 
@@ -336,7 +337,26 @@ void Game::loadLevel()
 				    pump->initBody(world, x * 32, y * 32);
 				    pumps.push_back(pump);
 				} break;
+			case TO_BONUS_SPEED:
+				{
+					Bonus* bonus = new Bonus(BT_SPEED);
+					bonus->initBody(world, x * 32, y * 32);
+					bonuses.push_back(bonus);
+				} break;
+			case TO_BONUS_WTF:
+				{
+					Bonus* bonus = new Bonus(BT_ANTIGRAVITATION);
+					bonus->initBody(world, x * 32, y * 32);
+					bonuses.push_back(bonus);
+				} break;
+			case TO_BONUS_JUMP:
+				{
+					Bonus* bonus = new Bonus(BT_JUMPING);
+					bonus->initBody(world, x * 32, y * 32);
+					bonuses.push_back(bonus);
+				} break;
 			}
+
 
 			if(map[x][y].modification != TM_NONE) {
 				if(map[x][y].object != TO_SPIKE || map[x][y].object != TO_PUMP_OUTPUT || map[x][y].object != TO_PUMP_INFLATOR) {

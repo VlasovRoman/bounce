@@ -108,6 +108,10 @@ void Painter::initTextures() {
 
 	textures[25] = loadTexture("resources/water.png");
 	textures[26] = loadTexture("resources/jumpWall.png");
+
+	textures[27] = loadTexture("resources/bonus1v2.2.png");
+	textures[28] = loadTexture("resources/bonus2.png");
+	textures[29] = loadTexture("resources/bonus3.png");
 }
 
 void Painter::drawBall(float x, float y, bool isBig, bool isKilled) {
@@ -253,6 +257,32 @@ void Painter::drawPump(float x, float y, bool inflator, int directionId) {
 void Painter::drawJumpWall(float x, float y) {
 	// drawWall(x, y, 0);
 	drawTexture(textures[26], x - camera->x, y - camera->y);
+}
+
+void Painter::drawBonus(float x, float y, int bonusTypeId,  int directionId) {
+	SDL_Texture* texture;
+
+	{
+		if(bonusTypeId == 1) 
+			texture = textures[27];
+		else if(bonusTypeId == 2)
+			texture = textures[28];
+		else
+			texture = textures[29];
+	}
+
+	float angle = 0;
+
+	if(directionId == 17)
+		angle = 0;
+	if(directionId == 18)
+		angle = 90;
+	if(directionId == 27)
+		angle = -90;
+	if(directionId == 28)
+		angle = 180;
+
+	drawTexture(texture, x - camera->x, y - camera->y, angle);
 }
 
 void Painter::drawGuiBase(float x, float y){

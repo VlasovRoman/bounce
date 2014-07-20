@@ -9,6 +9,7 @@
 #include "pump.h"
 #include "wall.h"
 #include "arrow.h"
+#include "bonus.h"
 
 using namespace std;
 
@@ -166,6 +167,31 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* manifold) {
 
 			if(isObjectsCollising(objectA, objectB, BALL, DIRECTION)) {
 				contact->SetEnabled(false);
+			}
+
+			if(isObjectsCollising(objectA, objectB, BALL, BONUSE)) {
+				Bonus* bonus;
+				GameObject* object;
+
+				if(objectA->getType() == BONUSE) {
+					object = objectA;
+					bonus = dynamic_cast<Bonus*>(object);
+				}
+				else {
+					object = objectB;
+						
+					bonus = dynamic_cast<Bonus*>(object);
+				}
+
+				if(bonus->getType() == BT_SPEED) {
+					player->addBonus(0);
+				}
+				else if(bonus->getType() == BT_ANTIGRAVITATION) {
+					player->addBonus(1);
+				}
+				else {
+					player->addBonus(2);
+				}
 			}
 
 			if(isObjectsCollising(objectA, objectB, PAUK, DIRECTION)) {
