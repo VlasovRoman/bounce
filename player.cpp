@@ -187,14 +187,19 @@ void Player::addBonus(int bonusId) {
 	}
 }
 
-void Player::birth(bool awake) {
+void Player::birth(bool awake, int modificationId) {
 	// cout << "Player birthed" << endl;
 	killedTimeNow = 0;
 	killed = false;
 
+	if(modificationId == 10) {
+		isBig = true;
+		cout << "IS BIG" << endl;
+	}
+
 	if(awake){
 		lives = 3;
-		isBig = false;
+		// isBig = false;
 	}
 	else {
 		isBig = lastType;

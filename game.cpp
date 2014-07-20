@@ -244,15 +244,39 @@ void Game::loadLevel()
 				    wall->initBody(world, x * 32, y * 32);
 				    walls.push_back(wall);
 				}break;
+			case TO_JUMP_WALL_DOWN_LEFT_EDGE:
+				{
+				    Wall* wall = new Wall(DOWN_LEFT_EDGE, true);
+				    wall->initBody(world, x * 32, y * 32);
+				    walls.push_back(wall);
+				} break;
+			case TO_JUMP_WALL_DOWN_RIGHT_EDGE:
+				{
+				    Wall* wall = new Wall(DOWN_RIGHT_EDGE, true);
+				    wall->initBody(world, x * 32, y * 32);
+				    walls.push_back(wall);
+				} break;
+			case TO_JUMP_WALL_UP_RIGHT_EDGE:
+				{
+				    Wall* wall = new Wall(UP_RIGHT_EDGE, true);
+				    wall->initBody(world, x * 32, y * 32);
+				    walls.push_back(wall);
+				} break;
+			case TO_JUMP_WALL_UP_LEFT_EDGE:
+				{
+				    Wall* wall = new Wall(UP_LEFT_EDGE, true);
+				    wall->initBody(world, x * 32, y * 32);
+				    walls.push_back(wall);
+				} break;
 			case TO_SPAWN:
 				{
 					// player = new Player(painter);
 					// player->initBody(world, x * 32, y * 32);
 					player->setCheckpoint(b2Vec2(x * 32 * 0.01f, y * 32 * 0.01f));
 					if(levelId == 1)
-						player->birth(true);
+						player->birth(true, map[x][y].modification);
 					else
-						player->birth(false);
+						player->birth(false, map[x][y].modification);
 				} break;
 			case TO_PORTAL:
 				{

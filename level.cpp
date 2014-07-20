@@ -173,7 +173,19 @@ void Level::draw() {
             }
             if(tile.object == TO_JUMP_WALL) {
                 // cout << "rednerer" << endl;
-                painter->drawJumpWall(x * 32, y * 32);
+                painter->drawJumpWall(x * 32, y * 32, 0);
+            }
+            if(tile.object == TO_JUMP_WALL_DOWN_RIGHT_EDGE) {
+                painter->drawJumpWall(x * 32, y * 32, 2);
+            }
+            if(tile.object == TO_JUMP_WALL_DOWN_LEFT_EDGE) {
+                painter->drawJumpWall(x * 32, y * 32, 1);
+            }
+            if(tile.object == TO_JUMP_WALL_UP_RIGHT_EDGE) {
+                painter->drawJumpWall(x * 32, y * 32, 4);
+            }
+            if(tile.object == TO_JUMP_WALL_UP_LEFT_EDGE) {
+                painter->drawJumpWall(x * 32, y * 32, 3);
             }
             if(tile.object == TO_BONUS_SPEED) {
                 painter->drawBonus(x * 32, y * 32, 1, 1);

@@ -59,7 +59,7 @@ public:
 	void 			addLifes(int i);
 	int 			getLives();
 
-	void 			birth(bool awake );
+	void 			birth(bool awake, int modificationId = false);
 
 	bool 			getDeath();
 	bool			getBig();
