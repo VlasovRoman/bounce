@@ -330,7 +330,7 @@ void Painter::drawGuiRing(float x, float y){
 	drawTexture(textures[17], x, y);
 }
 
-void Painter::drawMenuBackgound() {
+void Painter::drawMenuBackground() {
 	drawTexture(textures[34], 0, 0);
 }
 

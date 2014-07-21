@@ -70,7 +70,7 @@ public:
 	void 		drawGuiRing(float x, float y);
 
 	void 		drawMenuBackground();
-	void 		drawItemSelector(float x, float y);
+	void 		drawMenuItemSelector(float x, float y);
 };
 
 #endif
