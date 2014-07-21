@@ -117,6 +117,8 @@ void Painter::initTextures() {
 	textures[31] = loadTexture("resources/jumpWall2.png");
 	textures[32] = loadTexture("resources/jumpWall3.png");
 	textures[33] = loadTexture("resources/jumpWall4.png");
+	textures[34] = loadTexture("resources/menuBackground.png");
+	textures[35] = loadTexture("resources/itemSelector.png");
 }
 
 void Painter::initFonts() {

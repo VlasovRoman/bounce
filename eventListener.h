@@ -54,7 +54,7 @@ public:
 				case SDLK_DOWN:
 					keyDown = true;
 					break;
-				case SDLK_EXECUTE:
+				case SDLK_RETURN:
 					keyEnter = true;
 					break;
 			} 

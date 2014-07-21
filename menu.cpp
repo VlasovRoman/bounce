@@ -23,6 +23,7 @@ void Menu::frame() {
 	}
 	if(listener->isKeyDown(KEY_ENTER)) {
 		enterPressed = true;
+		cout << "ENTER PRESSED" << endl;
 	}
 }
 
@@ -42,7 +43,7 @@ void Menu::draw(Painter* painter) {
 	painter->drawMenuBackground();
 
 	for(int i = 0; i < items.size(); i++) {
-		painter->drawText(15, 15 + i * 32, items[i], 255, 255, 255);
+		painter->drawText(15, 15 + i * 32, items[i], 0, 0, 0);
 	}
 
 	painter->drawMenuItemSelector(15, 15 + cursor * 32);

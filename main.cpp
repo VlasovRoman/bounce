@@ -5,6 +5,7 @@
 
 #include "game.h"
 #include "painter.h"
+#include "menu.h"
 
 // bool frameFunc() {
 // 	game.frame();
@@ -48,20 +49,40 @@ int main() {
 
 	Painter* painter = new Painter(renderer);
 	painter->initTextures();
+	painter->initFonts();
+
+	bool gameIsStarted = false;
 
 	Game game(painter);
+	Menu mainMenu(listener);
 
-	game.loadLevel();
-	game.setEventListener(listener);
+	mainMenu.addItem("New game");
+
+	// game.loadLevel();
+	// game.setEventListener(listener);
 
 	while(!listener->isQuit()) {
 		listener->listen();
 
-		game.frame();
+		if(gameIsStarted)
+			game.frame();
+		else {
+			mainMenu.frame();
+			int commandId = -1;
+			commandId = mainMenu.getItemId();
+			if(commandId == 0) {
+				gameIsStarted = true;
+				game.loadLevel();
+				game.setEventListener(listener);
+			}
+		}
 
 		painter->clear();
 
-		game.render();
+		if(gameIsStarted)
+			game.render();
+		else
+			mainMenu.draw(painter);
 
 		painter->present();
 	}
