@@ -8,7 +8,9 @@
 enum KEY_NAME {
 	KEY_UP,
 	KEY_LEFT,
-	KEY_RIGHT
+	KEY_RIGHT,
+	KEY_DOWN,
+	KEY_ENTER
 };
 
 class EventListener {
@@ -18,11 +20,14 @@ class EventListener {
 	bool 			keyDown;
 	bool			keyLeft;
 	bool			keyRight;
+	bool 			keyEnter;
 
 	void clearStatus() {
 		keyUp = false;
 		keyLeft = false;
 		keyRight = false;
+		keyDown = false;
+		keyEnter = false;
 	}
 
 public:
@@ -46,6 +51,12 @@ public:
 				case SDLK_UP:
 					keyUp = true;
 					break;
+				case SDLK_DOWN:
+					keyDown = true;
+					break;
+				case SDLK_ENTER:
+					keyEnter = true;
+					break;
 			} 
 		}
 	}
@@ -68,6 +79,10 @@ public:
 		if(name == KEY_UP) {
 			return keyUp;
 		}
+		if(name == KEY_DOWN)
+			return keyDown;
+		if(name == KEY_ENTER)
+			return keyEnter;
 		else
 			return false;
 	}
