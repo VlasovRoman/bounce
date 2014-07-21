@@ -3,6 +3,7 @@
 
 // #include "sprite.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <string>
 #include "camera.h"
 
@@ -13,6 +14,7 @@ class Painter {
 	Camera*			camera;
 
 	SDL_Texture* 		textures[30];
+	TTF_Font*			mainFont;
 	//Ball:  	2 textures 			[0..1]
 	//Wall:		5 textures //TODO 	[2] & [19..22]
 	//Space: 	1 textures 			[3]
@@ -30,6 +32,7 @@ class Painter {
 
 	SDL_Texture* 	loadTexture(string nameOfTexture);
 
+
 	void 			drawTexture(SDL_Texture* texture, float x, float y, float angle = 0);
 	void			rotateTexture(SDL_Texture* texture, SDL_Texture* target,float angle);
 public:
@@ -42,6 +45,7 @@ public:
 	Camera*		getCamera();
 	
 	void 		initTextures();
+	void 		initFonts();
 
 	void 		drawBall(float x, float y, bool isBig, bool isKilled);
 	void 		drawWall(float x, float y, int type);
@@ -56,6 +60,8 @@ public:
 	void 		drawPump(float x, float y, bool inflator, int directionId);
 	void 		drawJumpWall(float x, float y, int type);
 	void 		drawBonus(float x, float y, int bonusTypeId, int directionId);
+
+	void 		drawText(float x, float y, string text, int r, int g, int b);
 
 	void 		drawGuiBase(float x, float y);
 	void 		drawGuiLive(float x, float y);

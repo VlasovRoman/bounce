@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "game.h"
 #include "painter.h"
@@ -28,6 +29,10 @@ int main() {
 
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_Window* window = NULL;
+
+	if(TTF_Init() == -1) {
+		std::cout << "SDL_ttf cou not initialize! SDL_ttf error:  " << TTF_GetError() << std::endl;
+	}
 
 	window = SDL_CreateWindow("Bounce: Remake", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREENWIDTH, SCREENHEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 	if(window == NULL) {

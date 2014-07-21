@@ -299,6 +299,20 @@ void Painter::drawBonus(float x, float y, int bonusTypeId,  int directionId) {
 	drawTexture(texture, x - camera->x, y - camera->y, angle);
 }
 
+void Painter::drawText(float x, float y, string text, int r, int g, int b) {
+	SDL_Color color = {r, g, b};
+	// color.r = r;
+	// color.g = g;
+	// color.b = b;
+	SDL_Surface* message = NULL;
+	SDL_Texture* texture = NULL;
+
+	message = TTF_RenderText_Solid(mainFont, text.c_str(), color);
+	texture = SDL_CreateTextureFromSurface(renderer, message);
+
+	drawTexture(texture, x, y);
+}
+
 void Painter::drawGuiBase(float x, float y){
 	drawTexture(textures[15], x, y);
 }
@@ -307,4 +321,11 @@ void Painter::drawGuiLive(float x, float y){
 }
 void Painter::drawGuiRing(float x, float y){
 	drawTexture(textures[17], x, y);
+}
+
+void Painter::initFonts() {
+	mainFont = TTF_OpenFont("resources/fonts/36daysag.ttf", 28);
+	if(mainFont == NULL) {
+		cout << "Font is not loaded" << endl;
+	}
 }
