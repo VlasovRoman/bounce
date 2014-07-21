@@ -9,7 +9,7 @@ Painter::Painter(SDL_Renderer* renderer) {
 	this->renderer = renderer;
 	setCamera();
 
-	for(int i = 0; i < 27; i++) {
+	for(int i = 0; i < 32; i++) {
 		textures[i] = NULL;
 	}
 }
@@ -117,6 +117,13 @@ void Painter::initTextures() {
 	textures[31] = loadTexture("resources/jumpWall2.png");
 	textures[32] = loadTexture("resources/jumpWall3.png");
 	textures[33] = loadTexture("resources/jumpWall4.png");
+}
+
+void Painter::initFonts() {
+	mainFont = TTF_OpenFont("resources/fonts/36daysag.ttf", 28);
+	if(mainFont == NULL) {
+		cout << "Font is not loaded" << endl;
+	}
 }
 
 void Painter::drawBall(float x, float y, bool isBig, bool isKilled) {
@@ -323,9 +330,10 @@ void Painter::drawGuiRing(float x, float y){
 	drawTexture(textures[17], x, y);
 }
 
-void Painter::initFonts() {
-	mainFont = TTF_OpenFont("resources/fonts/36daysag.ttf", 28);
-	if(mainFont == NULL) {
-		cout << "Font is not loaded" << endl;
-	}
+void Painter::drawMenuBackgound() {
+	drawTexture(textures[34], 0, 0);
+}
+
+void Painter::drawMenuItemSelector(float x, float y) {
+	drawTexture(textures[35], x, y);
 }

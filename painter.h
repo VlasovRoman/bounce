@@ -13,7 +13,7 @@ class Painter {
 	SDL_Renderer*	renderer;
 	Camera*			camera;
 
-	SDL_Texture* 		textures[30];
+	SDL_Texture* 		textures[36];
 	TTF_Font*			mainFont;
 	//Ball:  	2 textures 			[0..1]
 	//Wall:		5 textures //TODO 	[2] & [19..22]
@@ -29,6 +29,8 @@ class Painter {
 	//Water:	1 textures			[25]
 	//JumpWall	5 textures 			[26] & [30..33]
 	//Bonuses:	3 textures 			[27..29]
+	//Menu:		2 textures 			[34..35]
+
 
 	SDL_Texture* 	loadTexture(string nameOfTexture);
 
@@ -66,6 +68,9 @@ public:
 	void 		drawGuiBase(float x, float y);
 	void 		drawGuiLive(float x, float y);
 	void 		drawGuiRing(float x, float y);
+
+	void 		drawMenuBackground();
+	void 		drawItemSelector(float x, float y);
 };
 
 #endif
