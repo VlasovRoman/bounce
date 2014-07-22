@@ -10,7 +10,8 @@ enum KEY_NAME {
 	KEY_LEFT,
 	KEY_RIGHT,
 	KEY_DOWN,
-	KEY_ENTER
+	KEY_ENTER, 
+	KEY_ESCAPE
 };
 
 class EventListener {
@@ -22,12 +23,15 @@ class EventListener {
 	bool			keyRight;
 	bool 			keyEnter;
 
+	bool			keyEscape;
+
 	void clearStatus() {
 		keyUp = false;
 		keyLeft = false;
 		keyRight = false;
 		keyDown = false;
 		keyEnter = false;
+		keyEscape = false;
 	}
 
 public:
@@ -57,6 +61,9 @@ public:
 				case SDLK_RETURN:
 					keyEnter = true;
 					break;
+				case SDLK_ESCAPE:
+					keyEscape = true;
+					break;
 			} 
 		}
 	}
@@ -83,6 +90,10 @@ public:
 			return keyDown;
 		if(name == KEY_ENTER)
 			return keyEnter;
+		if(name == KEY_ESCAPE) {
+			std::cout << keyEscape << std::endl;
+			return keyEscape;
+		}
 		else
 			return false;
 	}

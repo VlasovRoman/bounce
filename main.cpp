@@ -27,6 +27,7 @@
 int main() {
 	const int SCREENWIDTH = 320;
 	const int SCREENHEIGHT = 64 + 32 * 8;
+	bool quit = false;
 
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_Window* window = NULL;
@@ -56,24 +57,36 @@ int main() {
 	Game game(painter);
 	Menu mainMenu(listener);
 
-	mainMenu.addItem("New game");
+	mainMenu.addItem("New game", true);
+	mainMenu.addItem("Continue", false);
+	mainMenu.addItem("Quit", true);
+
+	mainMenu.init();
 
 	// game.loadLevel();
 	// game.setEventListener(listener);
 
-	while(!listener->isQuit()) {
+	while(!quit || !listener->isQuit()) {
 		listener->listen();
 
-		if(gameIsStarted)
-			game.frame();
+		if(gameIsStarted) {
+			if(listener->isKeyDown(KEY_ESCAPE)) {
+				cout << "escape.." << endl;
+				gameIsStarted = false;
+			}
+			else
+				game.frame();
+		}
 		else {
 			mainMenu.frame();
-			int commandId = -1;
-			commandId = mainMenu.getItemId();
-			if(commandId == 0) {
+			if(mainMenu.isItemPressed("New game")) {
 				gameIsStarted = true;
 				game.loadLevel();
 				game.setEventListener(listener);
+			}
+			if(mainMenu.isItemPressed("Quit")) {
+				quit = true;
+				cout << "quit..." << endl;
 			}
 		}
 

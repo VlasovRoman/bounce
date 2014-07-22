@@ -61,7 +61,7 @@ class Game {
 
 	Gui* 				gui;
 
-	string 				levelsName[3];
+	string 				levelsName[5];
 
 	int 				levelId;
 
