@@ -76,6 +76,8 @@ public:
 	void 			frame();
 	void 			render();
 
+	void 			setLevelId(int id);
+
 	void 			setEventListener(EventListener* listener);
 
 	void 			loadLevel();

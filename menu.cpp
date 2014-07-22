@@ -22,9 +22,9 @@ void Menu::init() {
 }
 
 void Menu::frame() {
+	listener->listen();
 
 	enterPressed = false;
-	if(count == 0) {
 		if(listener->isKeyDown(KEY_UP)){
 			// cursor--;
 			// if(cursor < 0) {
@@ -64,18 +64,17 @@ void Menu::frame() {
 		if(listener->isKeyDown(KEY_ENTER)) {
 			enterPressed = true;
 		}
-			count = 3;
-	}
-	else
-		count--;
 }
 
-int Menu::getItemId() {
-	if(enterPressed) {
-		return cursor;
-	}
-	else
-		return -1;
+int Menu::getSelectedItemId() {
+	// if(enterPressed) {
+		for(int i = 0; i < items.size(); i++) {
+			if(items[i].selected)
+				return i;
+		}
+	// }
+	// else
+	// 	return -1;
 }
 
 void Menu::addItem(string text, bool enable) {
@@ -112,6 +111,15 @@ bool Menu::isItemPressed(string text) {
 			if(items[i].text == text) {
 				return items[i].selected;
 			}
+		}
+	}
+
+}
+
+void Menu::enableItem(string text) {
+	for(int i = 0; i < items.size(); i++) {
+		if(items[i].text == text) {
+			items[i].enable = true;
 		}
 	}
 }

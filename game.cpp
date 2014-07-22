@@ -39,7 +39,6 @@ Game::Game(Painter* painter)
 	// world->SetContactListener(contactListener);
 
 	level = Level(painter);
-	levelId = 1;
 
 	gui = new Gui(painter);
 
@@ -48,6 +47,10 @@ Game::Game(Painter* painter)
 	levelsName[2] = "resources/level3.tmx";
 	levelsName[3] = "resources/level4.tmx";
 	levelsName[4] = "resources/level5.tmx";
+}
+
+void Game::setLevelId(int id) {
+	levelId = id + 1;
 }
 
 void Game::createWorld() {

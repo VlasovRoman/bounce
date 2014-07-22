@@ -33,9 +33,11 @@ public:
 	void 				frame();
 
 	void 				init();
+	
 
+	void 				enableItem(string text);
 	bool				isItemPressed(string text);
-	int 				getItemId();
+	int 				getSelectedItemId();
 	void 				addItem(string text, bool enable = true);
 
 	void 				draw(Painter* painter);
