@@ -61,7 +61,7 @@ class Game {
 
 	Gui* 				gui;
 
-	string 				levelsName[3];
+	string 				levelsName[5];
 
 	int 				levelId;
 
@@ -75,6 +75,8 @@ public:
 	
 	void 			frame();
 	void 			render();
+
+	void 			setLevelId(int id);
 
 	void 			setEventListener(EventListener* listener);
 

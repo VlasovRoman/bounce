@@ -3,6 +3,7 @@
 
 // #include "sprite.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <string>
 #include "camera.h"
 
@@ -12,7 +13,8 @@ class Painter {
 	SDL_Renderer*	renderer;
 	Camera*			camera;
 
-	SDL_Texture* 		textures[30];
+	SDL_Texture* 		textures[36];
+	TTF_Font*			mainFont;
 	//Ball:  	2 textures 			[0..1]
 	//Wall:		5 textures //TODO 	[2] & [19..22]
 	//Space: 	1 textures 			[3]
@@ -27,8 +29,11 @@ class Painter {
 	//Water:	1 textures			[25]
 	//JumpWall	5 textures 			[26] & [30..33]
 	//Bonuses:	3 textures 			[27..29]
+	//Menu:		2 textures 			[34..35]
+
 
 	SDL_Texture* 	loadTexture(string nameOfTexture);
+
 
 	void 			drawTexture(SDL_Texture* texture, float x, float y, float angle = 0);
 	void			rotateTexture(SDL_Texture* texture, SDL_Texture* target,float angle);
@@ -42,6 +47,7 @@ public:
 	Camera*		getCamera();
 	
 	void 		initTextures();
+	void 		initFonts();
 
 	void 		drawBall(float x, float y, bool isBig, bool isKilled);
 	void 		drawWall(float x, float y, int type);
@@ -57,9 +63,14 @@ public:
 	void 		drawJumpWall(float x, float y, int type);
 	void 		drawBonus(float x, float y, int bonusTypeId, int directionId);
 
+	void 		drawText(float x, float y, string text, int r, int g, int b);
+
 	void 		drawGuiBase(float x, float y);
 	void 		drawGuiLive(float x, float y);
 	void 		drawGuiRing(float x, float y);
+
+	void 		drawMenuBackground();
+	void 		drawMenuItemSelector(float x, float y);
 };
 
 #endif
