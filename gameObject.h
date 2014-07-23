@@ -1,9 +1,6 @@
 #ifndef GAME_OBJECT
 #define GAME_OBJECT
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-
 #include "dynamicBody.h"
 
 enum OBJECT_TYPE {
@@ -19,7 +16,6 @@ enum OBJECT_TYPE {
 	END_LEVEL,
 	PUMPILA,
 	BONUSE,
-	//...
 	DIRECTION
 };
 

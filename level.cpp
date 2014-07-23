@@ -1,16 +1,10 @@
 #include "level.h"
 #include <TmxParser/Tmx.h>
 #include <tinyxml.h>
-#include <Box2D/Box2D.h>
 
 using namespace std;
 
 Level::Level() {
-	this->painter = NULL;
-}
-
-Level::Level(Painter* painter) {
-	this->painter = painter;
     map = NULL;
 }
 
@@ -43,19 +37,13 @@ bool Level::loadFromFile(std::string _name) {
         return false;
     }
 
-    // // Работаем с контейнером map
     TiXmlElement *tileMap;
     tileMap = levelFile.FirstChildElement("map");
 
-    // // Пример карты: <map version="1.0" orientation="orthogonal"
-    // // width="10" height="10" tilewidth="34" tileheight="34">
     width = atoi(tileMap->Attribute("width"));
     height = atoi(tileMap->Attribute("height"));
     tileWidth = atoi(tileMap->Attribute("tilewidth"));
     tileHeight = atoi(tileMap->Attribute("tileheight"));
-
-    // cout << width << " " << height << endl;
-
 
     map = new Tile*[width];
     for(int i = 0; i < width; i++) {
@@ -63,7 +51,7 @@ bool Level::loadFromFile(std::string _name) {
     }
 
     clear();
-    // // Работа со слоями
+    
     TiXmlElement *layerElement;
     layerElement = tileMap->FirstChildElement("layer");
     while(layerElement)
@@ -96,7 +84,6 @@ bool Level::loadFromFile(std::string _name) {
         {
 
             int tileGID = atoi(tileElement->Attribute("gid"));
-            // int subRectToUse = tileGID - firstTileID;
 
             if(layerName == "environment") {
                 map[x][y].environment = (TILE_ENVIRONMENT)tileGID;
@@ -119,12 +106,10 @@ bool Level::loadFromFile(std::string _name) {
                     y = 0;
             }
         }
-
         layerElement = layerElement->NextSiblingElement("layer");
     }
 
     return true;
-
 }
 
 Tile** Level::getMap() {
@@ -135,7 +120,7 @@ b2Vec2 Level::getMapSize() {
     return b2Vec2(width, height);
 }
 
-void Level::draw() {
+void Level::draw(Painter* painter) {
     for(int y = 0; y < height; y++){
         for(int x = 0; x < width; x++) {
             Tile tile = map[x][y];
@@ -196,7 +181,6 @@ void Level::draw() {
             if(tile.object == TO_BONUS_JUMP) {
                 painter->drawBonus(x * 32, y * 32, 3, 1);
             }
-            // painter->drawJumpWall(5 * 32, 5 * 32);
         }
     }
 }

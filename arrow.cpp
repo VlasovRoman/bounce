@@ -1,18 +1,15 @@
 #include "arrow.h"
-#include <iostream>
 
 Arrow::Arrow() : GameObject(DIRECTION) {}
 
 Arrow::Arrow(ARROW_TYPE type) : GameObject(DIRECTION) {
 	this->type = type;
-	// this->jumpWall = jumpWall;
 }
 
 void Arrow::initBody(b2World* world, float x, float y) {
-	bodyDef.type = b2_staticBody;
+	initStaticBodyDef();
+
 	bodyDef.position = b2Vec2((x + 16) * 0.01f, (y + 16) * 0.01f);
-	bodyDef.fixedRotation = true;
-	bodyDef.userData = this;
 	
 	body = world->CreateBody(&bodyDef);
 

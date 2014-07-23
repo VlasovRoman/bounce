@@ -1,15 +1,13 @@
 #include "checkpoint.h"
 #include <iostream>
 
-Checkpoint::Checkpoint(Painter* painter) : GameObject(CHECK), Sprite(painter) {
+Checkpoint::Checkpoint() : GameObject(CHECK), iDrawable() {
 	active = false;
 }
 
 void Checkpoint::initBody(b2World* world, float x, float y) {
-	bodyDef.type = b2_staticBody;
+	initStaticBodyDef();
 	bodyDef.position = b2Vec2((x + 16) * 0.01f, (y + 16) * 0.01f);
-	bodyDef.fixedRotation = true;
-	bodyDef.userData = this;
 
 	b2PolygonShape shape;
 
@@ -34,7 +32,7 @@ void Checkpoint::setActive(bool active) {
 	this->active = active;
 }
 
-void Checkpoint::draw() {
+void Checkpoint::draw(Painter* painter) {
 	float x = body->GetPosition().x * 100;
 	float y = body->GetPosition().y * 100;
 

@@ -47,37 +47,13 @@ bool ContactListener::isObjectsCollising(GameObject* objectOne, GameObject* obje
 		return false;
 }
 
-b2Vec2 ContactListener::getCollisionPoint(b2Contact* contact, b2Body* staticBody) {
-	b2Manifold* manifold = contact->GetManifold();
-	b2Vec2	contactPoint = manifold->points[0].localPoint;
-	b2Vec2	worldPoint = staticBody->GetWorldPoint(contactPoint);
+b2Vec2 ContactListener::getCollisionPoint(b2Contact* contact) {
+	b2WorldManifold worldManifold;
+	contact->GetWorldManifold(&worldManifold);
 
-	// if(worldPoint.y * 100 > playerBody->GetPosition().y * 100) {
+	b2Vec2	contactPoint = worldManifold.points[0];
 
-	// 	Wall* wall;
-	// 	GameObject* wallObject;
-	// 	// cout << "Player on ground" << endl;
-	// 	if(objectA->getType() == BLOCK) {
-	// 		wallObject = objectA;
-	// 		wall = dynamic_cast<Wall*>(wallObject);
-	// 	}
-	// 	else {
-	// 		wallObject = objectB;
-				
-	// 		wall = dynamic_cast<Wall*>(wallObject);
-	// 	}
-	// 	if(wall->isJumpWall())
-	// 		player->setOnJumpGround(true);
-
-	// 	player->setOnGround(true);
-	// }
-}
-
-bool ContactListener::isPlayerOnGround(b2Vec2 contactPoint) {
-	b2Body* playerBody = player->getBody();
-	if(contactPoint.y * 100 > playerBody->GetPosition().y * 100) {
-		player->setOnGround(true);
-	}
+	return contactPoint;
 }
 
 void ContactListener::BeginContact(b2Contact* contact) {
@@ -111,31 +87,22 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* manifold) {
 					blockBody = oneBody;
 				}
 
-				b2Manifold* manifold = contact->GetManifold();
-				b2Vec2	contactPoint = manifold->points[0].localPoint;
-				b2Vec2	worldPoint = blockBody->GetWorldPoint(contactPoint);
+				b2Vec2	contactPoint = getCollisionPoint(contact);
 
-				if(worldPoint.y * 100 > playerBody->GetPosition().y * 100) {
+				Wall* wall;
+				GameObject* wallObject;
 
-					Wall* wall;
-					GameObject* wallObject;
-					// cout << "Player on ground" << endl;
-					if(objectA->getType() == BLOCK) {
-						wallObject = objectA;
-						wall = dynamic_cast<Wall*>(wallObject);
-					}
-					else {
-						wallObject = objectB;
-							
-						wall = dynamic_cast<Wall*>(wallObject);
-					}
-					if(wall->isJumpWall())
-						player->setOnJumpGround(true);
-
-					player->setOnGround(true);
+				if(objectA->getType() == BLOCK) {
+					wallObject = objectA;
+					wall = dynamic_cast<Wall*>(wallObject);
 				}
-				// else
-				// 	player->setOnGround(false);
+				else {
+					wallObject = objectB;
+						
+					wall = dynamic_cast<Wall*>(wallObject);
+				}
+
+				player->setCollisionPoint(contactPoint, wall->isJumpWall());
 			}
 
 			if(isObjectsCollising(objectA, objectB, BALL, END_LEVEL)) {
@@ -225,18 +192,17 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* manifold) {
 				}
 
 				if(arrow->getType() == AT_UP) {
-					spider->setDirection(-1, -1);
+					spider->setDirection(17);
 				}
 				if(arrow->getType() == AT_RIGHT) {
-					spider->setDirection(1, 1);
+					spider->setDirection(18);
 				}
 				if(arrow->getType() == AT_DOWN) {
-					spider->setDirection(-1, 1);
+					spider->setDirection(28);
 				}
 				if(arrow->getType() == AT_LEFT) {
-					spider->setDirection(1, -1);
+					spider->setDirection(27);
 				}
-
 			}
 
 			if(isObjectsCollising(objectA, objectB, PAUK, PAUK) || isObjectsCollising(objectA, objectB, PAUK, BLOCK))  {
@@ -265,10 +231,9 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* manifold) {
 					pump = dynamic_cast<Pump*>(object);
 				}
 
-				b2Vec2 contactPoint = getCollisionPoint(contact, object->getBody());
-				if(isPlayerOnGround(contactPoint)) {
-					player->setOnGround(true);
-				}
+				b2Vec2 contactPoint = getCollisionPoint(contact);
+
+				player->setCollisionPoint(contactPoint, false);
 
 				if(pump->getPumpType() == INFLATOR){
 					big = 1;
@@ -278,10 +243,8 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* manifold) {
 				}
 			}
 
-
 			if(isObjectsCollising(objectA, objectB, BALL, CHECK)) {
 				contact->SetEnabled(false);
-
 
 				GameObject* object;
 				if(objectA->getType() == CHECK) {
@@ -299,8 +262,6 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* manifold) {
 			}
 
 			if(isObjectsCollising(objectA, objectB, BALL, GOAL))  {
-				//TODO
-				//Event work anly when coords changed
 				Ring* ring;
 				GameObject* object;
 				if(objectA->getType() == GOAL) {
@@ -322,45 +283,8 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* manifold) {
 					{}
 				}
 				
-				float x1, y1;
-				float x2, y2;
-
-				x1 = oneBody->GetPosition().x * 100;
-				y1 = oneBody->GetPosition().y * 100;
-
-				x2 = twoBody->GetPosition().x * 100;
-				y2 = twoBody->GetPosition().y * 100;
-
-
-				// if(ring->getOrientation() == HORIZONTALE) {
-				// 	contact->SetEnabled(true);
-				// }
-
-				if(ring->getOrientation()) {
-					// x1 += 16;
-					// y1 += 32;
-					if((x1 - x2) * (x1 - x2) < 2.0f){
-						ring->diactivate();
-					}
-				}
-				else {
-					x1 += 32;
-					y1 += 16;
-
-					x2 += 16;
-					y2 += 16;
-
-					if((y1 - y2) * (y1 - y2) < 3.0f){
-						if((x1 - x2) * (x1 - x2) < 16.0f * 16.0f){
-							ring->diactivate();
-						}
-					}
-				}
-
-				// if(y1 == y2) {
-				// 	Ring* ring = dynamic_cast<Ring*>(object);
-				// 	ring->diactivate();
-				// }
+				ring->setPlayerPosition((b2Vec2*)&player->getBody()->GetPosition());
+				ring->checkOnThePassage();
 			}
 
 			if(isObjectsCollising(objectA, objectB, BALL, LIF))  {
@@ -387,17 +311,13 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* manifold) {
 				contact->SetEnabled(false);
 
 				player->setUnderWater(true);
-				// b2Body* playerBody = player->getBody();
-
-				// playerBody->ApplyForceToCenter(b2Vec2(0.0f, -0.1f), false);
 			}
 		}
 	}
 }
 
-void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) {
+void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) {}
 
-}
 ContactListener::~ContactListener() {
 	player = NULL;
 }

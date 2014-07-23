@@ -92,7 +92,7 @@ public:
 		}
 	}
 
-	bool 			isQuit() {
+	bool isQuit() {
 		if(event->type == SDL_QUIT) {
 			return true;
 		}
@@ -101,54 +101,27 @@ public:
 	}
 
 	bool	isKeyDown(KEY_NAME name) {
-		// if(name == KEY_LEFT) {
-		// 	return keyLeft;
-		// }
-		// if(name == KEY_RIGHT) {
-		// 	return keyRight;
-		// }
-		// if(name == KEY_UP) {
-		// 	return keyUp;
-		// }
-		// if(name == KEY_DOWN)
-		// 	return keyDown;
-		// if(name == KEY_ENTER) {
-		// 	bool dd = keyEnter;
-		// 	keyEnter = false;
-		// 	return dd;
-		// }
-		// if(name == KEY_ESCAPE) {
-		// 	return keyEscape;
-		// }
-		// else
-		// 	return false;
-			switch(name) {
-				case KEY_ENTER: {
-					return keyEnter;
-				} break;
-				case KEY_ESCAPE: {
-					return keyEscape;
-				} break;
-				case KEY_UP: {
-					return keyUp;
-				} break;
-				case KEY_RIGHT: {
-					return keyRight;
-				} break;
-				case KEY_DOWN: {
-					return keyDown;
-				} break;
-				case KEY_LEFT: {
-					return keyLeft;
-				} break;
-
-			}
-
+		switch(name) {
+			case KEY_ENTER: {
+				return keyEnter;
+			} break;
+			case KEY_ESCAPE: {
+				return keyEscape;
+			} break;
+			case KEY_UP: {
+				return keyUp;
+			} break;
+			case KEY_RIGHT: {
+				return keyRight;
+			} break;
+			case KEY_DOWN: {
+				return keyDown;
+			} break;
+			case KEY_LEFT: {
+				return keyLeft;
+			} break;
+		}
 	}
-
-
-
-
 };
 
 #endif

@@ -1,20 +1,22 @@
 #ifndef H_CLASS_PLAYER
 #define H_CLASS_PLAYER
 
-#include <SDL2/SDL.h>
+// #include <SDL2/SDL.h>
 
 #include "gameObject.h"
 #include "eventListener.h"
-#include "sprite.h"
+#include "iDrawable.h"
 #include "camera.h"
 
-class Player: public GameObject, public Sprite {
+class Player: public GameObject, public iDrawable  {
 protected:
 	Camera*				camera;
 
 	b2Body*				bigBall;
 	b2BodyDef			bigBallDef;
 	b2FixtureDef		bigBallFixtureDef;
+
+	b2Vec2				collisionPoint;
 
 	b2FixtureDef 		fixture;
 
@@ -53,6 +55,8 @@ public:
 
 	void 			setUnderWater(bool is);
 
+	void 			setCollisionPoint(b2Vec2 collisionPoint, bool jumpimngWall);
+
 	void 			inflate();
 	void			blowAway();
 
@@ -68,7 +72,7 @@ public:
 
 	b2Body* 		getBody();
 
-	void 			draw();
+	void 			draw(Painter* painter);
 };
 
 #endif

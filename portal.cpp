@@ -1,20 +1,14 @@
 #include "portal.h"
-#include "gameObject.h"
-#include <iostream>
 
-using namespace std;
-
-Portal::Portal(Painter* painter) : GameObject(END_LEVEL), Sprite(painter) {
+Portal::Portal() : GameObject(END_LEVEL), iDrawable() {
 	active = false;
 }
 
 void Portal::initBody(b2World* world, float x, float y) {
+	initStaticBodyDef();
 	b2Vec2 pos =  b2Vec2((x + 32) * 0.01f, (y + 32) * 0.01f);
-	bodyDef.type = b2_staticBody;
-	bodyDef.position = pos;
 
-	bodyDef.fixedRotation = true;
-	bodyDef.userData = this;
+	bodyDef.position = pos;
 
 	b2PolygonShape shape;
 	
@@ -34,7 +28,7 @@ bool Portal::getState() {
 	return active;
 }
 
-void Portal::draw() {
+void Portal::draw(Painter* painter) {
 	float x = body->GetPosition().x * 100;
 	float y = body->GetPosition().y * 100;
 
