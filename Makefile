@@ -1,7 +1,7 @@
 all: bounce
 
-bounce: main.o gui.o pump.o bonus.o spider.o arrow.o water.o game.o level.o painter.o wall.o gameObject.o dynamicBody.o player.o sprite.o contactListener.o spike.o checkpoint.o portal.o ring.o life.o
-	g++ -g -o bounce gui.o pump.o bonus.o spider.o water.o arrow.o main.o game.o painter.o level.o wall.o gameObject.o dynamicBody.o player.o sprite.o contactListener.o spike.o checkpoint.o ring.o life.o portal.o -lSDL2 -lSDL2_image -lBox2D -ltinyxml -lz -ltmxparser
+bounce: main.o gui.o pump.o bonus.o menu.o spider.o arrow.o water.o game.o level.o painter.o wall.o gameObject.o dynamicBody.o player.o sprite.o contactListener.o spike.o checkpoint.o portal.o ring.o life.o
+	g++ -g -o bounce gui.o pump.o bonus.o menu.o spider.o water.o arrow.o main.o game.o painter.o level.o wall.o gameObject.o dynamicBody.o player.o sprite.o contactListener.o spike.o checkpoint.o ring.o life.o portal.o -lSDL2 -lSDL2_ttf -lSDL2_image -lBox2D -ltinyxml -lz -ltmxparser
 
 # bounce: main.o
 # 	g++ -g -o bounce main.o -lSDL2 -lSDL2_image
