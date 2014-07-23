@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Portal::Portal(Painter* painter) : GameObject(END_LEVEL), Sprite(painter) {
+Portal::Portal() : GameObject(END_LEVEL), iDrawable() {
 	active = false;
 }
 
@@ -35,7 +35,7 @@ bool Portal::getState() {
 	return active;
 }
 
-void Portal::draw() {
+void Portal::draw(Painter* painter) {
 	float x = body->GetPosition().x * 100;
 	float y = body->GetPosition().y * 100;
 

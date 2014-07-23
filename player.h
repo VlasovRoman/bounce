@@ -5,10 +5,10 @@
 
 #include "gameObject.h"
 #include "eventListener.h"
-#include "sprite.h"
+#include "iDrawable.h"
 #include "camera.h"
 
-class Player: public GameObject, public Sprite {
+class Player: public GameObject, public iDrawable  {
 protected:
 	Camera*				camera;
 
@@ -72,7 +72,7 @@ public:
 
 	b2Body* 		getBody();
 
-	void 			draw();
+	void 			draw(Painter* painter);
 };
 
 #endif

@@ -1,7 +1,7 @@
 #include "checkpoint.h"
 #include <iostream>
 
-Checkpoint::Checkpoint(Painter* painter) : GameObject(CHECK), Sprite(painter) {
+Checkpoint::Checkpoint() : GameObject(CHECK), iDrawable() {
 	active = false;
 }
 
@@ -35,7 +35,7 @@ void Checkpoint::setActive(bool active) {
 	this->active = active;
 }
 
-void Checkpoint::draw() {
+void Checkpoint::draw(Painter* painter) {
 	float x = body->GetPosition().x * 100;
 	float y = body->GetPosition().y * 100;
 

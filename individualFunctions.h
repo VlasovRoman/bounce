@@ -8,7 +8,7 @@ using namespace std;
 
 string addIntToString(string text, int number) {
 	stringstream stream;
-	stream << id;
+	stream << number;
 	text += stream.str();
 	return text;
 }

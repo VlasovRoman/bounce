@@ -6,20 +6,20 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include "camera.h"
-#include "sprite.h"
+// #include ".h"
+#include "painter.h"
 #include "tile.h"
 
 using namespace std;
 
 class Level {
-	Painter* 			painter;
+	// Painter* 			painter;
 	
 	Tile** 				map;
 	int 				width, height;
 	int 				tileWidth, tileHeight;
 public:
 	Level();
-	Level(Painter* painter);
 
 	bool			loadFromFile(std::string name);
 	void 			clear();
@@ -28,7 +28,7 @@ public:
 
 	b2Vec2			getMapSize();
 
-	void 			draw();
+	void 			draw(Painter* painter);
 };
 
 #endif

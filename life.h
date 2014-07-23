@@ -2,20 +2,20 @@
 #define LIFE
 
 #include "gameObject.h"
-#include "sprite.h"
+#include "iDrawable.h"
 
-class Life : public GameObject, public Sprite {
+class Life : public GameObject, public iDrawable {
 protected:
 	bool				deleted;
 public:
-	Life(Painter* painter);
+	Life();
 
 	void 			initBody(b2World* world, float x, float y);
 
 	void 			setDelete();
 	bool			isDeleted();
 
-	void 			draw();
+	void 			draw(Painter* painter);
 };
 
 #endif

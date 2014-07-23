@@ -38,7 +38,7 @@ Game::Game(Painter* painter)
 
 	// world->SetContactListener(contactListener);
 
-	level = Level(painter);
+	level = Level();
 
 	gui = new Gui(painter);
 
@@ -128,31 +128,31 @@ void Game::frame() {
 }
 
 void Game::render()	{
-	level.draw();
+	level.draw(painter);
 
 	for(int i = 0; i < checkpoints.size(); i++) {
-		checkpoints[i]->draw();
+		checkpoints[i]->draw(painter);
 	}
 
 	for(int i = 0; i < rings.size(); i++) {
-		rings[i]->draw(true);
+		rings[i]->draw(painter, true);
 	}
 
-	player->draw();
+	player->draw(painter);
 
 	for(int i = 0; i < rings.size(); i++) {
-		rings[i]->draw(false);
+		rings[i]->draw(painter, false);
 	}
 
 	for(int i = 0; i < lifes.size(); i++) {
-		lifes[i]->draw();
+		lifes[i]->draw(painter);
 	}
 
 	for(int i = 0; i < spiders.size(); i++) {
-		spiders[i]->draw();
+		spiders[i]->draw(painter);
 	}
 
-	portal->draw();
+	portal->draw(painter);
 	gui->draw(player, ringsNumber);
 }
 
@@ -285,7 +285,7 @@ void Game::loadLevel()
 				} break;
 			case TO_PORTAL:
 				{
-					portal = new Portal(painter);
+					portal = new Portal();
 					portal->initBody(world, x * 32, y * 32);
 				} break;
 			case TO_SPIKE:
@@ -298,34 +298,34 @@ void Game::loadLevel()
 				} break;
 			case TO_CHECKPOINT:
 				{
-					Checkpoint* chk = new Checkpoint(painter);
+					Checkpoint* chk = new Checkpoint();
 				    chk->initBody(world, x * 32, y * 32);
 				    checkpoints.push_back(chk);
 				} break;
 			case TO_RING_SMALL_VERT:
 				{
-					Ring* ring = new Ring(painter);
+					Ring* ring = new Ring();
 					ring->init(true, false);
 				    ring->initBody(world, x * 32, y * 32);
 				    rings.push_back(ring);
 				} break;
 			case TO_RING_BIG_VERT:
 				{
-					Ring* ring = new Ring(painter);
+					Ring* ring = new Ring();
 					ring->init(true, true);
 				    ring->initBody(world, x * 32, y * 32);
 				    rings.push_back(ring);
 				} break;
 			case TO_RING_SMALL_HOR:
 				{
-					Ring* ring = new Ring(painter);
+					Ring* ring = new Ring();
 					ring->init(false, false);
 				    ring->initBody(world, x * 32, y * 32);
 				    rings.push_back(ring);
 				} break;
 			case TO_LIFE:
 				{
-					Life* life = new Life(painter);
+					Life* life = new Life();
 				    life->initBody(world, x * 32, y * 32);
 				    lifes.push_back(life);
 				} break;
@@ -333,8 +333,8 @@ void Game::loadLevel()
 			case TO_SPIDER_1:
 				{
 					// if(map[x + 1][y].object == TO_SPIDER_2) {
-						Spider* spider = new Spider(painter);
-						spider->setWhole(true);
+						Spider* spider = new Spider();
+						// spider->setWhole(true);
 						spider->setDirection(map[x][y].modification);
 						map[x][y].modification = TM_NONE;
 						spider->setDirection(map[x + 1][y].modification);
@@ -343,7 +343,7 @@ void Game::loadLevel()
 						spiders.push_back(spider);
 					// }
 					// else {
-					// 	Spider* spider = new Spider(painter);
+					// 	Spider* spider = new Spider();
 					// 	spider->setWhole(false, false);
 					// 	spider->initBody(world, x * 32, y * 32);
 					// 	spiders.push_back(spider);
@@ -352,7 +352,7 @@ void Game::loadLevel()
 			// case TO_SPIDER_2 : 
 			// 	{
 			// 		if(map[x - 1][y].object != TO_SPIDER_1) {
-			// 			Spider* spider = new Spider(painter);
+			// 			Spider* spider = new Spider();
 			// 			spider->setWhole(false, true);
 			// 			spider->initBody(world, x * 32, y * 32);
 			// 			spiders.push_back(spider);
@@ -447,7 +447,7 @@ Game::~Game() {
 	// delete 	portal;
 	// delete 	contactListener;
 	// eventListener = NULL;
-	// painter = NULL;
+	//  = NULL;
 	// camera = NULL;
 	// delete 	gui;
 	// delete 	world;

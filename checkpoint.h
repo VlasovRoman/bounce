@@ -5,23 +5,23 @@
 
 #include "gameObject.h"
 #include "eventListener.h"
-#include "sprite.h"
+#include "iDrawable.h"
 #include "camera.h"
 
 #include "gameObject.h"
 
-class Checkpoint : public GameObject, public Sprite {
+class Checkpoint : public GameObject, public iDrawable {
 protected:
 	bool				active;
 public:
-	Checkpoint(Painter* painter);
+	Checkpoint();
 
 	void 			initBody(b2World* world, float x, float y);
 
 	bool			getActive();
 	void			setActive(bool active);
 
-	void 			draw();
+	void 			draw(Painter* painter);
 };
 
 #endif

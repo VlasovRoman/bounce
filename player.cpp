@@ -1,16 +1,13 @@
 #include "player.h"
 #include <SDL2/SDL.h>
 
-#include "sprite.h"
+// #include "sprite.h"
 
 #include <iostream>
 
 using namespace std;
 
-
-Player::Player() : GameObject(BALL), Sprite() {}
-
-Player::Player(Painter* painter) : GameObject(BALL), Sprite(painter) {
+Player::Player(Painter* painter) : GameObject(BALL), iDrawable() {
 	camera = painter->getCamera();
 	onGround = false;
 	underWater = false;
@@ -268,7 +265,7 @@ void Player::setCheckpoint(b2Vec2 position) {
 	lastType = isBig;
 }
 
-void Player::draw() {
+void Player::draw(Painter* painter) {
 	// cout << "Player drawed" << endl;
 	int rad;
 	if(isBig)
@@ -331,5 +328,5 @@ b2Body* Player::getBody() {
 Player::~Player() {
 	cout << "deleting player..." << endl;
 	camera = NULL;
-	painter = NULL;
+	// painter = NULL;
 }

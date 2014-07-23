@@ -6,11 +6,6 @@
 using namespace std;
 
 Level::Level() {
-	this->painter = NULL;
-}
-
-Level::Level(Painter* painter) {
-	this->painter = painter;
     map = NULL;
 }
 
@@ -135,7 +130,7 @@ b2Vec2 Level::getMapSize() {
     return b2Vec2(width, height);
 }
 
-void Level::draw() {
+void Level::draw(Painter* painter) {
     for(int y = 0; y < height; y++){
         for(int x = 0; x < width; x++) {
             Tile tile = map[x][y];

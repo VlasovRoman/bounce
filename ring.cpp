@@ -1,7 +1,7 @@
 #include "ring.h"
 #include <iostream>
 
-Ring::Ring(Painter* painter) : GameObject(GOAL), Sprite(painter) {
+Ring::Ring() : GameObject(GOAL), iDrawable() {
 	active = true;
 	playerPosition = NULL;
 	lastDelta = b2Vec2(0, 0);
@@ -169,7 +169,7 @@ bool Ring::isActive() {
 	return active;
 }
 
-void Ring::draw(bool drawRightPart) {
+void Ring::draw(Painter* painter,bool drawRightPart) {
 	float x, y;
 	x = body->GetPosition().x * 100;
 	y = body->GetPosition().y * 100;
@@ -190,7 +190,7 @@ void Ring::draw(bool drawRightPart) {
 	
 }
 
-void Ring::draw() {
+void Ring::draw(Painter* painter) {
 
 }
 

@@ -1,6 +1,6 @@
 #include "life.h"
 
-Life::Life(Painter* painter) : GameObject(LIF), Sprite(painter) {
+Life::Life() : GameObject(LIF), iDrawable() {
 	deleted = false;
 }
 
@@ -19,7 +19,7 @@ void Life::initBody(b2World* world, float x, float y) {
 	body->CreateFixture(&shape, 1.0f);
 }
 
-void Life::draw() {
+void Life::draw(Painter* painter) {
 	painter->drawLife(body->GetPosition().x * 100 - 16, body->GetPosition().y * 100 - 16);
 }
 

@@ -1,30 +1,27 @@
 #include "spider.h"
 #include <SDL2/SDL.h>
 
-#include "sprite.h"
+// #include "sprite.h"
 
 #include <iostream>
 
 using namespace std;
 
-
-Spider::Spider() : GameObject(PAUK), Sprite(NULL) {}
-
-Spider::Spider(Painter* painter) : GameObject(PAUK), Sprite(painter) {
+Spider::Spider() : GameObject(PAUK), iDrawable() {
 	velocity = 1.0f;
 	direction.deltaX = 0;
 	direction.deltaY = 0;
-	isRightPart = NULL;
+	// isRightPart = NULL;
 }
 
-void Spider::setWhole(bool is, bool isRight) {
-	isWhole = is;
+// void Spider::setWhole(bool is, bool isRight) {
+// 	isWhole = is;
 
-	if(!isWhole) {
-		isRightPart = new bool;
-		*isRightPart = isRight;
-	}
-}
+// 	if(!isWhole) {
+// 		isRightPart = new bool;
+// 		*isRightPart = isRight;
+// 	}
+// }
 
 void Spider::initBody(b2World* world, float x, float y) {
 	initDynamicBodyDef();
@@ -93,22 +90,22 @@ void Spider::setDirection(int directionId) {
 	else {}
 }
 
-void Spider::reverse() {
-	// if(!alreadyChecked)
-	// 	body->SetLinearVelocity(-(body->GetLinearVelocity()));
-	// alreadyChecked = true;
-}
+// void Spider::reverse() {
+// 	// if(!alreadyChecked)
+// 	// 	body->SetLinearVelocity(-(body->GetLinearVelocity()));
+// 	// alreadyChecked = true;
+// }
 
 void Spider::frame() {
 	body->SetLinearVelocity(b2Vec2(velocity * direction.deltaX, velocity * direction.deltaY));
 	//alreadyChecked = false;
 }
 
-void Spider::draw() {
-	int shift = 32;
+void Spider::draw(Painter* painter) {
+	// int shift = 32;
 
-	if(!isWhole)
-		shift = 16;
+	// if(!isWhole)
+	// 	shift = 16;
 	// Sprite::drawTexture(body->GetPosition().x * 100 - camera->x - 32, body->GetPosition().y * 100 - camera->y - 32);
-	painter->drawSpider(body->GetPosition().x * 100 - shift, body->GetPosition().y * 100 - shift, 0);
+	painter->drawSpider(body->GetPosition().x * 100 - 32, body->GetPosition().y * 100 - 32, 0);
 };
