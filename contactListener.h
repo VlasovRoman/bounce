@@ -12,7 +12,7 @@ class ContactListener : public b2ContactListener {
 
 	bool 	isObjectsCollising(GameObject* objectOne, GameObject* objectTwo, OBJECT_TYPE typeOne, OBJECT_TYPE typeTwo);
 	b2Vec2	getCollisionPoint(b2Contact* contact);
-	bool	isPlayerOnGround(b2Vec2 contactPoint);
+	// bool	isPlayerOnGround(b2Vec2 contactPoint);
 public:
 	ContactListener();
 	~ContactListener();

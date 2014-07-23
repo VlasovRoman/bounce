@@ -9,6 +9,7 @@
 #include "game.h"
 #include "painter.h"
 #include "menu.h"
+#include "individualFunctions.h"
 
 using namespace std;
 
@@ -78,12 +79,9 @@ int main() {
 	int yesLevels = atoi(levelString.c_str());
 
 	for(int i = 0; i < yesLevels; i++) {
-		int id = i + 1;
+		// int id = i + 1;
 		string levelName = "Level ";
-		stringstream stream;
-		stream << id;
-		levelName += stream.str();
-		// string number = itoa(id);
+		levelName = addIntToString(levelName, i + 1);
 		selectLevel.addItem(levelName, true);
 	}
 
@@ -124,9 +122,10 @@ int main() {
 				int levelId = selectLevel.getSelectedItemId();
 
 				string levelName = "Level ";
-				stringstream stream;
-				stream << levelId + 1;
-				levelName += stream.str();
+				levelName = addIntToString(levelName, levelId + 1);
+				// stringstream stream;
+				// stream << levelId + 1;
+				// levelName += stream.str();
 
 				cout << levelName << endl;
 
