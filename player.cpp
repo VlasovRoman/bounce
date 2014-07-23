@@ -1,7 +1,4 @@
 #include "player.h"
-#include <SDL2/SDL.h>
-
-// #include "sprite.h"
 
 #include <iostream>
 
@@ -29,7 +26,6 @@ Player::Player(Painter* painter) : GameObject(BALL), iDrawable() {
 }
 
 bool Player::getDeath() {
-	// cout << "Death" << endl;
 	if(lives == 0)
 		return true;
 	else 
@@ -37,29 +33,22 @@ bool Player::getDeath() {
 }
 
 void Player::initBody(b2World* world, float x, float y) {
-	// cout << "Player body initialized" << endl;
 	setCheckpoint(b2Vec2((x + 16) * 0.01f, (y + 16) * 0.01f));
-	// lastCheckpoint = b2Vec2((x + 16) * 0.01f, (y + 16) * 0.01f);
-	//Small ball
+
 	{
 		initDynamicBodyDef();
 
 		bodyDef.linearDamping = 1.0f;
 		bodyDef.position = lastCheckpoint;
-		// bodyDef.type = b2_dynamicBody;
 		bodyDef.fixedRotation = false;
-		// bodyDef.allowSleep = false;
-		// bodyDef.userData = this;
-	
-	
+		
 		b2CircleShape shape;
 		shape.m_radius = 16 * 0.01f;
 	
 		fixture.shape = &shape;
 		fixture.friction = 1.0f;
 		fixture.density = 1.0f;
-		// fixture.restitution = 0.5;
-	
+
 		body = world->CreateBody(&bodyDef);
 		body->CreateFixture(&fixture);
 	}
@@ -71,10 +60,7 @@ void Player::initBody(b2World* world, float x, float y) {
 		
 		bigBallDef.position = b2Vec2(-64 * 0.01f, -64 * 0.01f);
 
-		// bigBallDef.type = b2_dynamicBody;
 		bigBallDef.fixedRotation = false;
-		// bigBallDef.allowSleep = false;
-		// bigBallDef.userData = this;
 
 		b2CircleShape shape;
 		shape.m_radius = 24 * 0.01f;
@@ -82,14 +68,12 @@ void Player::initBody(b2World* world, float x, float y) {
 		bigBallFixtureDef.shape = &shape;
 		bigBallFixtureDef.friction = 1.0f;
 		bigBallFixtureDef.density = 1.0f;
-		// bigBallFixtureDef.restitution = 0.5;
 
 		bigBall = world->CreateBody(&bigBallDef);
 		bigBall->CreateFixture(&bigBallFixtureDef);
 	}
 
 	lastBody = body;
-	// cout << x << " " << y << endl;
 }
 
 void Player::control(EventListener* eventListener) {
@@ -137,7 +121,6 @@ void Player::control(EventListener* eventListener) {
 
 	cout << onGround << endl;
 	
-	// cout << "control" << endl;
 	if(killed) {
 		killedTimeNow++;
 	}
@@ -162,22 +145,15 @@ void Player::control(EventListener* eventListener) {
 			velocity += b2Vec2(0.0f, -jumpSpeed);
 		}
 
-		// if(onJumpGround) {
-		// 	cout << "On jump ground" << endl;
-		// 	cout << velocity.y << endl;
-		// 	velocity.y = -(velocity.y);
-		// 	cout << velocity.y << endl;
-		// }
-		// else	
-		// {}
-
 		onGround = false;
 		onJumpGround = false;
 		lastBody->SetLinearVelocity(velocity);
 	}
+
 	if(killedTimeNow >= killedTime) {
 		birth(false);
 	}
+
 	underWater = false;
 	onGround = false;
 	collisionPoint = b2Vec2(0, 0);
@@ -188,7 +164,6 @@ bool Player::getBig() {
 }
 
 void Player::destroyBody() {
-	// cout << "Player body destroed" << endl;
 	b2World* world = body->GetWorld();
 
 	world->DestroyBody(body);
@@ -196,7 +171,6 @@ void Player::destroyBody() {
 }
 
 void Player::setOnGround(bool is) {
-	// cout << "onGround: " << onGround << endl;;
 	onGround = is;
 }
 
@@ -211,7 +185,6 @@ void Player::addBonus(int bonusId) {
 }
 
 void Player::birth(bool awake, int modificationId) {
-	// cout << "Player birthed" << endl;
 	killedTimeNow = 0;
 	killed = false;
 
@@ -222,7 +195,6 @@ void Player::birth(bool awake, int modificationId) {
 
 	if(awake){
 		lives = 3;
-		// isBig = false;
 	}
 	else {
 		isBig = lastType;
@@ -233,8 +205,6 @@ void Player::birth(bool awake, int modificationId) {
 	}
 	else
 		blowAway();
-
-	// cout << "LAST" << lastCheckpoint.x << " " << lastCheckpoint.y << endl;
 
 	lastBody->SetTransform(lastCheckpoint, 0.0f);
 	lastBody->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
@@ -252,7 +222,6 @@ void Player::setCollisionPoint(b2Vec2 collisionPoint, bool jumpingWall) {
 }
 
 void Player::kill() {
-	// cout << "Player killed" << endl;
 	if(!killed) {
 		killed = true;
 		lives--;
@@ -260,13 +229,11 @@ void Player::kill() {
 }
 
 void Player::setCheckpoint(b2Vec2 position) {
-	// cout << "Player checkpoint seted" << endl;
 	lastCheckpoint = position;
 	lastType = isBig;
 }
 
 void Player::draw(Painter* painter) {
-	// cout << "Player drawed" << endl;
 	int rad;
 	if(isBig)
 		rad = 24;
@@ -293,7 +260,6 @@ void Player::inflate() {
 	}
 	lastBody = bigBall;
 
-	// body->SetUserData(NULL);
 	bigBall->SetGravityScale(1.0f);
 	body->SetGravityScale(0.0f);
 	body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
@@ -328,5 +294,4 @@ b2Body* Player::getBody() {
 Player::~Player() {
 	cout << "deleting player..." << endl;
 	camera = NULL;
-	// painter = NULL;
 }

@@ -1,14 +1,8 @@
 #ifndef CHECKPOINT
 #define CHECKPOINT
 
-#include <SDL2/SDL.h>
-
 #include "gameObject.h"
-#include "eventListener.h"
 #include "iDrawable.h"
-#include "camera.h"
-
-#include "gameObject.h"
 
 class Checkpoint : public GameObject, public iDrawable {
 protected:

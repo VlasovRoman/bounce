@@ -1,5 +1,3 @@
-// #pragma once
-
 #ifndef DYNAMIC_BODY
 #define DYNAMIC_BODY
 

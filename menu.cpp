@@ -26,10 +26,6 @@ void Menu::frame() {
 
 	enterPressed = false;
 		if(listener->isKeyDown(KEY_UP)){
-			// cursor--;
-			// if(cursor < 0) {
-			// 	cursor = items.size() - 1;
-			// }
 			for(int i = 0; i < items.size(); i++) {
 				if(items[i].selected) {
 					int nextCursor = i - 1;
@@ -67,14 +63,10 @@ void Menu::frame() {
 }
 
 int Menu::getSelectedItemId() {
-	// if(enterPressed) {
-		for(int i = 0; i < items.size(); i++) {
-			if(items[i].selected)
-				return i;
-		}
-	// }
-	// else
-	// 	return -1;
+	for(int i = 0; i < items.size(); i++) {
+		if(items[i].selected)
+			return i;
+	}
 }
 
 void Menu::addItem(string text, bool enable) {
@@ -98,11 +90,6 @@ void Menu::draw(Painter* painter) {
 			}
 		}
 	}
-
-	// for(int i = 0; i < items.size(); i++) {
-	// 	i
-	// }
-
 }
 
 bool Menu::isItemPressed(string text) {

@@ -1,15 +1,9 @@
-#ifndef SPRITE
-#define SPRITE
+#ifndef INTERFACE_DRAWABLE
+#define INTERFACE_DRAWABLE
 
 #include "painter.h"
 
 struct iDrawable {
-// protected:
-// 	Painter*		painter;
-// public:
-// 	Sprite(Painter* painter = NULL);
-// 	virtual ~Sprite();
-
 	virtual	void draw(Painter* painter) = 0;
 };
 

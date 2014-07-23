@@ -10,11 +10,9 @@ Wall::Wall(BLOCK_TYPE type, bool jumpWall) : GameObject(BLOCK) {
 
 void Wall::initBody(b2World* world, float x, float y) {
 	initStaticBodyDef();
-	// bodyDef.type = b2_staticBody;
-	bodyDef.position = b2Vec2((x + 16) * 0.01f, (y + 16) * 0.01f);
-	// bodyDef.fixedRotation = true;
-	// bodyDef.userData = this;
 	
+	bodyDef.position = b2Vec2((x + 16) * 0.01f, (y + 16) * 0.01f);
+
 	body = world->CreateBody(&bodyDef);
 
 	b2PolygonShape shape;
@@ -65,10 +63,7 @@ void Wall::initBody(b2World* world, float x, float y) {
 	fixture.friction = 1.0f;
 	fixture.density = 1.0f;
 
-	// if(jumpWall)
-	// 	fixture.restitution = 1.5;
-	// else
-		fixture.restitution = 0;
+	fixture.restitution = 0;
 	
 	body->CreateFixture(&fixture);
 }

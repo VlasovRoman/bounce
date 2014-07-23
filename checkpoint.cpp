@@ -7,10 +7,7 @@ Checkpoint::Checkpoint() : GameObject(CHECK), iDrawable() {
 
 void Checkpoint::initBody(b2World* world, float x, float y) {
 	initStaticBodyDef();
-	// bodyDef.type = b2_staticBody;
 	bodyDef.position = b2Vec2((x + 16) * 0.01f, (y + 16) * 0.01f);
-	// bodyDef.fixedRotation = true;
-	// bodyDef.userData = this;
 
 	b2PolygonShape shape;
 

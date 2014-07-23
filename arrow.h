@@ -13,8 +13,6 @@ enum ARROW_TYPE {
 class Arrow : public GameObject {
 	ARROW_TYPE	type;
 
-	// bool 		jumpWall;
-
 public:
 	Arrow();
 	Arrow(ARROW_TYPE type);

@@ -2,7 +2,6 @@
 #define PORTAL
 
 #include "gameObject.h"
-// #include "camera.h"
 #include "iDrawable.h"
 
 class Portal : public GameObject, public iDrawable {

@@ -3,18 +3,10 @@
 
 #include <Box2D/Box2D.h>
 #include <string>
-#include <SDL2/SDL.h>
-#include <iostream>
-#include "camera.h"
-// #include ".h"
 #include "painter.h"
 #include "tile.h"
 
-using namespace std;
-
-class Level {
-	// Painter* 			painter;
-	
+class Level {	
 	Tile** 				map;
 	int 				width, height;
 	int 				tileWidth, tileHeight;

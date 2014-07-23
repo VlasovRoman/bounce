@@ -1,7 +1,7 @@
 #include "painter.h"
+
 #include <SDL2/SDL_image.h>
 #include <iostream>
-#include "ring.h"
 
 using namespace std;
 
@@ -310,9 +310,6 @@ void Painter::drawBonus(float x, float y, int bonusTypeId,  int directionId) {
 
 void Painter::drawText(float x, float y, string text, int r, int g, int b) {
 	SDL_Color color = {r, g, b};
-	// color.r = r;
-	// color.g = g;
-	// color.b = b;
 	SDL_Surface* message = NULL;
 	SDL_Texture* texture = NULL;
 

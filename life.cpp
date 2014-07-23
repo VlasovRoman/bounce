@@ -6,11 +6,8 @@ Life::Life() : GameObject(LIF), iDrawable() {
 
 void Life::initBody(b2World* world, float x, float y) {
 	initStaticBodyDef();
-	// bodyDef.type = b2_staticBody;
+	
 	bodyDef.position = b2Vec2((x + 16) * 0.01f, (y + 16) * 0.01f);
-	// bodyDef.fixedRotation = true;
-	// bodyDef.userData = this;
-
 
 	b2CircleShape shape;
 	shape.m_radius = 16 * 0.01f;

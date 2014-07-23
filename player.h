@@ -1,7 +1,7 @@
 #ifndef H_CLASS_PLAYER
 #define H_CLASS_PLAYER
 
-#include <SDL2/SDL.h>
+// #include <SDL2/SDL.h>
 
 #include "gameObject.h"
 #include "eventListener.h"
