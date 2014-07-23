@@ -47,10 +47,12 @@ bool ContactListener::isObjectsCollising(GameObject* objectOne, GameObject* obje
 		return false;
 }
 
-b2Vec2 ContactListener::getCollisionPoint(b2Contact* contact, b2Body* staticBody) {
-	b2Manifold* manifold = contact->GetManifold();
-	b2Vec2	contactPoint = manifold->points[0].localPoint;
-	b2Vec2	worldPoint = staticBody->GetWorldPoint(contactPoint);
+b2Vec2 ContactListener::getCollisionPoint(b2Contact* contact) {
+
+	b2WorldManifold worldManifold;
+	contact->GetWorldManifold(&worldManifold);
+
+	b2Vec2	contactPoint = worldManifold.points[0];
 
 	// if(worldPoint.y * 100 > playerBody->GetPosition().y * 100) {
 
@@ -71,14 +73,15 @@ b2Vec2 ContactListener::getCollisionPoint(b2Contact* contact, b2Body* staticBody
 
 	// 	player->setOnGround(true);
 	// }
+	return contactPoint;
 }
 
-bool ContactListener::isPlayerOnGround(b2Vec2 contactPoint) {
-	b2Body* playerBody = player->getBody();
-	if(contactPoint.y * 100 > playerBody->GetPosition().y * 100) {
-		player->setOnGround(true);
-	}
-}
+// bool ContactListener::isPlayerOnGround(b2Vec2 contactPoint) {
+// 	b2Body* playerBody = player->getBody();
+// 	if(contactPoint.y * 100 > playerBody->GetPosition().y * 100) {
+// 		player->setOnGround(true);
+// 	}
+// }
 
 void ContactListener::BeginContact(b2Contact* contact) {
 }
@@ -111,12 +114,13 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* manifold) {
 					blockBody = oneBody;
 				}
 
-				b2Manifold* manifold = contact->GetManifold();
-				b2WorldManifold worldManifold;
-				contact->GetWorldManifold(&worldManifold);
+				// b2Manifold* manifold = contact->GetManifold();
+				// b2WorldManifold worldManifold;
+				// contact->GetWorldManifold(&worldManifold);
 
-				b2Vec2	contactPoint = worldManifold.points[0];
-				b2Vec2	worldPoint = blockBody->GetWorldPoint(contactPoint);
+				b2Vec2	contactPoint = getCollisionPoint(contact);
+
+				// b2Vec2	worldPoint = blockBody->GetWorldPoint(contactPoint);
 				// cout << "contactPoint " << contactPoint.x * 100 << " " << contactPoint.y * 100 << endl;
 				// cout << "worldPoint " << worldPoint.x * 100 << " " << worldPoint.y * 100 << endl;
 
@@ -229,16 +233,16 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* manifold) {
 				}
 
 				if(arrow->getType() == AT_UP) {
-					spider->setDirection(-1, -1);
+					spider->setDirection(17);
 				}
 				if(arrow->getType() == AT_RIGHT) {
-					spider->setDirection(1, 1);
+					spider->setDirection(18);
 				}
 				if(arrow->getType() == AT_DOWN) {
-					spider->setDirection(-1, 1);
+					spider->setDirection(28);
 				}
 				if(arrow->getType() == AT_LEFT) {
-					spider->setDirection(1, -1);
+					spider->setDirection(27);
 				}
 
 			}
@@ -269,10 +273,9 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* manifold) {
 					pump = dynamic_cast<Pump*>(object);
 				}
 
-				b2Vec2 contactPoint = getCollisionPoint(contact, object->getBody());
-				if(isPlayerOnGround(contactPoint)) {
-					player->setOnGround(true);
-				}
+				b2Vec2 contactPoint = getCollisionPoint(contact);
+
+				player->setCollisionPoint(contactPoint, false);
 
 				if(pump->getPumpType() == INFLATOR){
 					big = 1;
