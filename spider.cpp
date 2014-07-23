@@ -13,7 +13,7 @@ Spider::Spider() : GameObject(PAUK), Sprite(NULL) {}
 Spider::Spider(Painter* painter) : GameObject(PAUK), Sprite(painter) {
 	velocity = 1.0f;
 	direction.deltaX = 0;
-	direction.deltaY = 1;
+	direction.deltaY = 0;
 	isRightPart = NULL;
 }
 
@@ -72,6 +72,22 @@ void Spider::setDirection(int x, int y) {
 	}
 	else
 		direction.deltaY = y;
+}
+
+void Spider::setDirection(int directionId) {
+	if(directionId == 17) {
+		setDirection(-1, -1);
+	}
+	if(directionId == 18) {
+		setDirection(1, 1);
+	}
+	if(directionId == 28) {
+		setDirection(-1, 1);
+	}
+	if(directionId == 27) {
+		setDirection(1, -1) ;
+	}
+	else {}
 }
 
 void Spider::reverse() {

@@ -332,28 +332,32 @@ void Game::loadLevel()
 
 			case TO_SPIDER_1:
 				{
-					if(map[x + 1][y].object == TO_SPIDER_2) {
+					// if(map[x + 1][y].object == TO_SPIDER_2) {
 						Spider* spider = new Spider(painter);
 						spider->setWhole(true);
+						spider->setDirection(map[x][y].modification);
+						map[x][y].modification = TM_NONE;
+						spider->setDirection(map[x + 1][y].modification);
+						map[x + 1][y].modification = TM_NONE;
 						spider->initBody(world, x * 32, y * 32);
 						spiders.push_back(spider);
-					}
-					else {
-						Spider* spider = new Spider(painter);
-						spider->setWhole(false, false);
-						spider->initBody(world, x * 32, y * 32);
-						spiders.push_back(spider);
-					}
+					// }
+					// else {
+					// 	Spider* spider = new Spider(painter);
+					// 	spider->setWhole(false, false);
+					// 	spider->initBody(world, x * 32, y * 32);
+					// 	spiders.push_back(spider);
+					// }
 				} break;
-			case TO_SPIDER_2 : 
-				{
-					if(map[x - 1][y].object != TO_SPIDER_1) {
-						Spider* spider = new Spider(painter);
-						spider->setWhole(false, true);
-						spider->initBody(world, x * 32, y * 32);
-						spiders.push_back(spider);
-					}
-				} break;
+			// case TO_SPIDER_2 : 
+			// 	{
+			// 		if(map[x - 1][y].object != TO_SPIDER_1) {
+			// 			Spider* spider = new Spider(painter);
+			// 			spider->setWhole(false, true);
+			// 			spider->initBody(world, x * 32, y * 32);
+			// 			spiders.push_back(spider);
+			// 		}
+			// 	} break;
 			case TO_PUMP_INFLATOR:
 				{
 					Pump* pump = new Pump(INFLATOR);
