@@ -94,7 +94,7 @@ void Player::initBody(b2World* world, float x, float y) {
 void Player::control(EventListener* eventListener) {
 	int rad = 16;
 	if(isBig)
-		rad = 32;
+		rad = 24;
 
 	float appliedVelocity = 0.6;
 	if(bonusCount[0] > 0) {
@@ -120,8 +120,8 @@ void Player::control(EventListener* eventListener) {
 		bonusCount[2]--;
 	}
 
-	// cout << "collisionPoint " << (int)(collisionPoint.x * 100) << " " << (int)(collisionPoint.y * 100) << endl;
-	// cout << "position " << (int)(lastBody->GetPosition().x * 100 + 16) << " " << (int)(lastBody->GetPosition().y * 100 + 16) << endl;
+	cout << "collisionPoint " << (int)(collisionPoint.x * 100) << " " << (int)(collisionPoint.y * 100) << endl;
+	cout << "position " << (int)(lastBody->GetPosition().x * 100 + rad) << " " << (int)(lastBody->GetPosition().y * 100 + rad) << endl;
 
 	if(((int)(collisionPoint.y * 100) == (int)(lastBody->GetPosition().y * 100 + rad)) &&  bonusCount[1] == 0){
 		onGround = true;
