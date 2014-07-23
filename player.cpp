@@ -105,7 +105,7 @@ void Player::control(EventListener* eventListener) {
 	else
 		maxVelocity = 2;
 
-	float jumpSpeed = 5.0f;
+	float jumpSpeed = 2.5f;
 	if(bonusCount[1] > 0) {
 		lastBody->SetGravityScale(-1.0f);
 		bonusCount[1]--;
@@ -123,10 +123,10 @@ void Player::control(EventListener* eventListener) {
 	cout << "collisionPoint " << (int)(collisionPoint.x * 100) << " " << (int)(collisionPoint.y * 100) << endl;
 	cout << "position " << (int)(lastBody->GetPosition().x * 100 + rad) << " " << (int)(lastBody->GetPosition().y * 100 + rad) << endl;
 
-	if(((int)(collisionPoint.y * 100) == (int)(lastBody->GetPosition().y * 100 + rad)) &&  bonusCount[1] == 0){
+	if(((int)(collisionPoint.y * 100) > (int)(lastBody->GetPosition().y * 100)) &&  bonusCount[1] == 0){
 		onGround = true;
 	}
-	if(((int)(collisionPoint.y * 100) == (int)(lastBody->GetPosition().y * 100 - rad)) && bonusCount[1] != 0) {
+	if(((int)(collisionPoint.y * 100) < (int)(lastBody->GetPosition().y * 100)) && bonusCount[1] != 0) {
 		onGround = true;
 	}
 
@@ -175,6 +175,7 @@ void Player::control(EventListener* eventListener) {
 	}
 	underWater = false;
 	onGround = false;
+	collisionPoint = b2Vec2(0, 0);
 }
 
 bool Player::getBig() {
