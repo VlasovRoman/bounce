@@ -27,6 +27,9 @@ protected:
 	b2BodyDef			firstBodyDef;
 	b2BodyDef			secondBodyDef;
 
+	b2Vec2*				playerPosition;
+	b2Vec2				lastDelta;
+
 	// RING_SIZE			type;
 	// RING_ORIENTATION	orientation;
 	// b2Vec2				lastPlayerShift;
@@ -46,6 +49,8 @@ public:
 
 	bool			getBig();
 
+	void 			setPlayerPosition(b2Vec2* position);
+	void 			checkOnThePassage();
 	bool			isActive();
 	void 			diactivate();
 

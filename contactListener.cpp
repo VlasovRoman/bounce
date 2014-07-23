@@ -322,45 +322,50 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* manifold) {
 					{}
 				}
 				
-				float x1, y1;
-				float x2, y2;
 
-				x1 = oneBody->GetPosition().x * 100;
-				y1 = oneBody->GetPosition().y * 100;
+				ring->setPlayerPosition((b2Vec2*)&player->getBody()->GetPosition());
+				ring->checkOnThePassage();
+				// ring->iterate();
+				// float x1, y1;
+				// float x2, y2;
 
-				x2 = twoBody->GetPosition().x * 100;
-				y2 = twoBody->GetPosition().y * 100;
+				// x1 = oneBody->GetPosition().x * 100;
+				// y1 = oneBody->GetPosition().y * 100;
+
+				// x2 = twoBody->GetPosition().x * 100;
+				// y2 = twoBody->GetPosition().y * 100;
 
 
 				// if(ring->getOrientation() == HORIZONTALE) {
 				// 	contact->SetEnabled(true);
 				// }
 
-				if(ring->getOrientation()) {
-					// x1 += 16;
-					// y1 += 32;
-					if((x1 - x2) * (x1 - x2) < 2.0f){
-						ring->diactivate();
-					}
-				}
-				else {
-					x1 += 32;
-					y1 += 16;
+				// if(ring->getOrientation()) {
+				// 	// x1 += 16;
+				// 	// y1 += 32;
+				// 	// if((x1 - x2) * (x1 - x2) < 2.0f){
+				// 	// 	ring->diactivate();
+				// 	// }
+				// }
+				// else {
+				// 	// x1 += 32;
+				// 	// y1 += 16;
 
-					x2 += 16;
-					y2 += 16;
+				// 	// x2 += 16;
+				// 	// y2 += 16;
 
-					if((y1 - y2) * (y1 - y2) < 3.0f){
-						if((x1 - x2) * (x1 - x2) < 16.0f * 16.0f){
-							ring->diactivate();
-						}
-					}
-				}
+				// 	// if((y1 - y2) * (y1 - y2) < 3.0f){
+				// 	// 	if((x1 - x2) * (x1 - x2) < 16.0f * 16.0f){
+				// 	// 		ring->diactivate();
+				// 	// 	}
+				// 	// }
+				// }
 
 				// if(y1 == y2) {
 				// 	Ring* ring = dynamic_cast<Ring*>(object);
 				// 	ring->diactivate();
 				// }
+
 			}
 
 			if(isObjectsCollising(objectA, objectB, BALL, LIF))  {

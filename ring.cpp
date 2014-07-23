@@ -3,6 +3,8 @@
 
 Ring::Ring(Painter* painter) : GameObject(GOAL), Sprite(painter) {
 	active = true;
+	playerPosition = NULL;
+	lastDelta = b2Vec2(0, 0);
 }
 
 void Ring::init(bool isVert, bool isBig) {
@@ -110,6 +112,54 @@ bool Ring::getOrientation() {
 	return isVert;
 }
 
+void Ring::setPlayerPosition(b2Vec2* position) {
+	playerPosition = position;
+}
+
+void Ring::checkOnThePassage() {
+	if(active) {
+		b2Vec2 delta;
+		delta.x = playerPosition->x - body->GetPosition().x;
+		delta.y = playerPosition->y - body->GetPosition().y;
+
+		if(isVert) {
+
+			if(delta.x > 0) {
+				if(lastDelta.x < 0) {
+					diactivate();
+				}
+				else {}
+			}
+			else {
+				if(delta.x < 0) {
+					if(lastDelta.x > 0) {
+						diactivate();
+					}
+					else {}
+				}
+			}
+		}
+		else {
+			if(delta.y > 0) {
+				if(lastDelta.y < 0) {
+					diactivate();
+				}
+				else {}
+			}
+			else {
+				if(delta.y < 0) {
+					if(lastDelta.y > 0) {
+						diactivate();
+					}
+					else {}
+				}
+			}
+		}
+		lastDelta = delta;
+		playerPosition = NULL;
+	}
+}
+
 void Ring::diactivate() {
 	active = false;
 }
@@ -142,3 +192,4 @@ void Ring::draw(bool drawRightPart) {
 void Ring::draw() {
 
 }
+
