@@ -112,10 +112,15 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* manifold) {
 				}
 
 				b2Manifold* manifold = contact->GetManifold();
-				b2Vec2	contactPoint = manifold->points[0].localPoint;
-				b2Vec2	worldPoint = blockBody->GetWorldPoint(contactPoint);
+				b2WorldManifold worldManifold;
+				contact->GetWorldManifold(&worldManifold);
 
-				if(worldPoint.y * 100 > playerBody->GetPosition().y * 100) {
+				b2Vec2	contactPoint = worldManifold.points[0];
+				b2Vec2	worldPoint = blockBody->GetWorldPoint(contactPoint);
+				// cout << "contactPoint " << contactPoint.x * 100 << " " << contactPoint.y * 100 << endl;
+				// cout << "worldPoint " << worldPoint.x * 100 << " " << worldPoint.y * 100 << endl;
+
+				// if(worldPoint.y * 100 > playerBody->GetPosition().y * 100) {
 
 					Wall* wall;
 					GameObject* wallObject;
@@ -129,11 +134,10 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* manifold) {
 							
 						wall = dynamic_cast<Wall*>(wallObject);
 					}
-					if(wall->isJumpWall())
-						player->setOnJumpGround(true);
 
-					player->setOnGround(true);
-				}
+				// 	player->setOnGround(true);
+				// }
+				player->setCollisionPoint(contactPoint, wall->isJumpWall());
 				// else
 				// 	player->setOnGround(false);
 			}

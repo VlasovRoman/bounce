@@ -16,6 +16,8 @@ protected:
 	b2BodyDef			bigBallDef;
 	b2FixtureDef		bigBallFixtureDef;
 
+	b2Vec2				collisionPoint;
+
 	b2FixtureDef 		fixture;
 
 	b2Body*				lastBody;
@@ -52,6 +54,8 @@ public:
 	void			addBonus(int bonusId);
 
 	void 			setUnderWater(bool is);
+
+	void 			setCollisionPoint(b2Vec2 collisionPoint, bool jumpimngWall);
 
 	void 			inflate();
 	void			blowAway();

@@ -92,6 +92,10 @@ void Player::initBody(b2World* world, float x, float y) {
 }
 
 void Player::control(EventListener* eventListener) {
+	int rad = 16;
+	if(isBig)
+		rad = 32;
+
 	float appliedVelocity = 0.6;
 	if(bonusCount[0] > 0) {
 		appliedVelocity = 1.2;
@@ -101,7 +105,7 @@ void Player::control(EventListener* eventListener) {
 	else
 		maxVelocity = 2;
 
-	float jumpSpeed = 2.5f;
+	float jumpSpeed = 5.0f;
 	if(bonusCount[1] > 0) {
 		lastBody->SetGravityScale(-1.0f);
 		bonusCount[1]--;
@@ -115,6 +119,18 @@ void Player::control(EventListener* eventListener) {
 		jumpSpeed *= 3;
 		bonusCount[2]--;
 	}
+
+	// cout << "collisionPoint " << (int)(collisionPoint.x * 100) << " " << (int)(collisionPoint.y * 100) << endl;
+	// cout << "position " << (int)(lastBody->GetPosition().x * 100 + 16) << " " << (int)(lastBody->GetPosition().y * 100 + 16) << endl;
+
+	if(((int)(collisionPoint.y * 100) == (int)(lastBody->GetPosition().y * 100 + rad)) &&  bonusCount[1] == 0){
+		onGround = true;
+	}
+	if(((int)(collisionPoint.y * 100) == (int)(lastBody->GetPosition().y * 100 - rad)) && bonusCount[1] != 0) {
+		onGround = true;
+	}
+
+	cout << onGround << endl;
 	
 	// cout << "control" << endl;
 	if(killed) {
@@ -158,6 +174,7 @@ void Player::control(EventListener* eventListener) {
 		birth(false);
 	}
 	underWater = false;
+	onGround = false;
 }
 
 bool Player::getBig() {
@@ -217,6 +234,15 @@ void Player::birth(bool awake, int modificationId) {
 	lastBody->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
 
 	camera->x = lastBody->GetPosition().x;
+}
+
+void Player::setCollisionPoint(b2Vec2 collisionPoint, bool jumpingWall) {
+	if((collisionPoint.y == lastBody->GetPosition().y)) {
+			cout << "Skipine..." << endl;
+	}
+	else
+		this->collisionPoint = collisionPoint;
+	onJumpGround = jumpingWall;
 }
 
 void Player::kill() {
