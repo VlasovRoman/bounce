@@ -9,7 +9,7 @@ Painter::Painter(SDL_Renderer* renderer) {
 	this->renderer = renderer;
 	setCamera();
 
-	for(int i = 0; i < 27; i++) {
+	for(int i = 0; i < 32; i++) {
 		textures[i] = NULL;
 	}
 }
@@ -117,6 +117,15 @@ void Painter::initTextures() {
 	textures[31] = loadTexture("resources/jumpWall2.png");
 	textures[32] = loadTexture("resources/jumpWall3.png");
 	textures[33] = loadTexture("resources/jumpWall4.png");
+	textures[34] = loadTexture("resources/menuBackground.png");
+	textures[35] = loadTexture("resources/itemSelector.png");
+}
+
+void Painter::initFonts() {
+	mainFont = TTF_OpenFont("resources/fonts/36daysag.ttf", 28);
+	if(mainFont == NULL) {
+		cout << "Font is not loaded" << endl;
+	}
 }
 
 void Painter::drawBall(float x, float y, bool isBig, bool isKilled) {
@@ -299,6 +308,20 @@ void Painter::drawBonus(float x, float y, int bonusTypeId,  int directionId) {
 	drawTexture(texture, x - camera->x, y - camera->y, angle);
 }
 
+void Painter::drawText(float x, float y, string text, int r, int g, int b) {
+	SDL_Color color = {r, g, b};
+	// color.r = r;
+	// color.g = g;
+	// color.b = b;
+	SDL_Surface* message = NULL;
+	SDL_Texture* texture = NULL;
+
+	message = TTF_RenderText_Solid(mainFont, text.c_str(), color);
+	texture = SDL_CreateTextureFromSurface(renderer, message);
+
+	drawTexture(texture, x, y);
+}
+
 void Painter::drawGuiBase(float x, float y){
 	drawTexture(textures[15], x, y);
 }
@@ -307,4 +330,12 @@ void Painter::drawGuiLive(float x, float y){
 }
 void Painter::drawGuiRing(float x, float y){
 	drawTexture(textures[17], x, y);
+}
+
+void Painter::drawMenuBackground() {
+	drawTexture(textures[34], 0, 0);
+}
+
+void Painter::drawMenuItemSelector(float x, float y) {
+	drawTexture(textures[35], x, y);
 }

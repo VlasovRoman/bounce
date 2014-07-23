@@ -39,13 +39,18 @@ Game::Game(Painter* painter)
 	// world->SetContactListener(contactListener);
 
 	level = Level(painter);
-	levelId = 1;
 
 	gui = new Gui(painter);
 
-	levelsName[0] = "resources/level3.tmx";
+	levelsName[0] = "resources/level1.tmx";
 	levelsName[1] = "resources/level2.tmx";
 	levelsName[2] = "resources/level3.tmx";
+	levelsName[3] = "resources/level4.tmx";
+	levelsName[4] = "resources/level5.tmx";
+}
+
+void Game::setLevelId(int id) {
+	levelId = id + 1;
 }
 
 void Game::createWorld() {
@@ -116,8 +121,8 @@ void Game::frame() {
 		camera->x = playerPos.x - camera->width / 2 + 16;
 	}
 
-	// if(ringsNumber == 0)
-	// 	portal->setActive();
+	if(ringsNumber == 0)
+		portal->setActive();
 
 	world->Step(timeStep, velocityIterations, positionIterations);
 }
