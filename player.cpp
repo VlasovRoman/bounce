@@ -120,6 +120,10 @@ void Player::control(EventListener* eventListener) {
 		bonusCount[2]--;
 	}
 
+	if(onJumpGround) {
+		jumpSpeed *= 2;
+	}
+
 	cout << "collisionPoint " << (int)(collisionPoint.x * 100) << " " << (int)(collisionPoint.y * 100) << endl;
 	cout << "position " << (int)(lastBody->GetPosition().x * 100 + rad) << " " << (int)(lastBody->GetPosition().y * 100 + rad) << endl;
 

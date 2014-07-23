@@ -64,9 +64,9 @@ void Wall::initBody(b2World* world, float x, float y) {
 	fixture.friction = 1.0f;
 	fixture.density = 1.0f;
 
-	if(jumpWall)
-		fixture.restitution = 1.5;
-	else
+	// if(jumpWall)
+	// 	fixture.restitution = 1.5;
+	// else
 		fixture.restitution = 0;
 	
 	body->CreateFixture(&fixture);
