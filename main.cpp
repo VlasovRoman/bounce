@@ -3,10 +3,14 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <fstream>
+#include <string>
+#include <sstream>
 
 #include "game.h"
 #include "painter.h"
 #include "menu.h"
+
+using namespace std;
 
 // bool frameFunc() {
 // 	game.frame();
@@ -74,7 +78,13 @@ int main() {
 	int yesLevels = atoi(levelString.c_str());
 
 	for(int i = 0; i < yesLevels; i++) {
-		selectLevel.addItem("Level " + (i + 1), true);
+		int id = i + 1;
+		string levelName = "Level ";
+		stringstream stream;
+		stream << id;
+		levelName += stream.str();
+		// string number = itoa(id);
+		selectLevel.addItem(levelName, true);
 	}
 
 	selectLevel.init();
@@ -112,8 +122,15 @@ int main() {
 			else {
 				selectLevel.frame();
 				int levelId = selectLevel.getSelectedItemId();
-				cout << levelId << endl;
-				if(selectLevel.isItemPressed("Level " + (levelId + 1))) {
+
+				string levelName = "Level ";
+				stringstream stream;
+				stream << levelId + 1;
+				levelName += stream.str();
+
+				cout << levelName << endl;
+
+				if(selectLevel.isItemPressed(levelName)) {
 					// cout << levelId << endl;
 					gameIsStarted = true;
 					game.setLevelId(levelId);
