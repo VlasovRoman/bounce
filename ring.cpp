@@ -13,11 +13,12 @@ void Ring::init(bool isVert, bool isBig) {
 }
 
 void Ring::initBody(b2World* world, float x, float y) {
+	initStaticBodyDef();
 	if(isVert) {
-		bodyDef.type = b2_staticBody;
+		// bodyDef.type = b2_staticBody;
 		bodyDef.position = b2Vec2((x + 16) * 0.01f, (y + 32) * 0.01f);
-		bodyDef.fixedRotation = true;
-		bodyDef.userData = this;
+		// bodyDef.fixedRotation = true;
+		// bodyDef.userData = this;
 
 		b2PolygonShape shape;
 		
@@ -31,10 +32,10 @@ void Ring::initBody(b2World* world, float x, float y) {
 		body->CreateFixture(&shape, 1.0f);
 	}
 	else {
-		bodyDef.type = b2_staticBody;
+		// bodyDef.type = b2_staticBody;
 		bodyDef.position = b2Vec2((x + 32) * 0.01f, (y + 16) * 0.01f);
-		bodyDef.fixedRotation = true;
-		bodyDef.userData = this;
+		// bodyDef.fixedRotation = true;
+		// bodyDef.userData = this;
 
 		b2PolygonShape shape;
 	

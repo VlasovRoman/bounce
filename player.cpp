@@ -45,12 +45,14 @@ void Player::initBody(b2World* world, float x, float y) {
 	// lastCheckpoint = b2Vec2((x + 16) * 0.01f, (y + 16) * 0.01f);
 	//Small ball
 	{
-		bodyDef.position = lastCheckpoint;
-		bodyDef.type = b2_dynamicBody;
+		initDynamicBodyDef();
+
 		bodyDef.linearDamping = 1.0f;
+		bodyDef.position = lastCheckpoint;
+		// bodyDef.type = b2_dynamicBody;
 		bodyDef.fixedRotation = false;
-		bodyDef.allowSleep = false;
-		bodyDef.userData = this;
+		// bodyDef.allowSleep = false;
+		// bodyDef.userData = this;
 	
 	
 		b2CircleShape shape;
@@ -67,13 +69,15 @@ void Player::initBody(b2World* world, float x, float y) {
 
 	//Big Ball
 	{
+		initDynamicBodyDef(&bigBallDef);
+		bigBallDef.linearDamping = 1.0f;
+		
 		bigBallDef.position = b2Vec2(-64 * 0.01f, -64 * 0.01f);
 
-		bigBallDef.type = b2_dynamicBody;
-		bigBallDef.linearDamping = 1.0f;
+		// bigBallDef.type = b2_dynamicBody;
 		bigBallDef.fixedRotation = false;
-		bigBallDef.allowSleep = false;
-		bigBallDef.userData = this;
+		// bigBallDef.allowSleep = false;
+		// bigBallDef.userData = this;
 
 		b2CircleShape shape;
 		shape.m_radius = 24 * 0.01f;

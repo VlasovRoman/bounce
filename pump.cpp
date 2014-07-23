@@ -8,10 +8,11 @@ Pump::Pump(PUMP_TYPE pumpType) : GameObject(PUMPILA) {
 }
 
 void Pump::initBody(b2World* world, float x, float y) {
-	bodyDef.type = b2_staticBody;
+	initStaticBodyDef();
+	// bodyDef.type = b2_staticBody;
 	bodyDef.position = b2Vec2((x + 16) * 0.01f, (y + 16) * 0.01f);
-	bodyDef.fixedRotation = true;
-	bodyDef.userData = this;
+	// bodyDef.fixedRotation = true;
+	// bodyDef.userData = this;
 	
 	body = world->CreateBody(&bodyDef);
 

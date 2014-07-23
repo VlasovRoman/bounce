@@ -9,12 +9,13 @@ Portal::Portal(Painter* painter) : GameObject(END_LEVEL), Sprite(painter) {
 }
 
 void Portal::initBody(b2World* world, float x, float y) {
+	initStaticBodyDef();
 	b2Vec2 pos =  b2Vec2((x + 32) * 0.01f, (y + 32) * 0.01f);
-	bodyDef.type = b2_staticBody;
+	// bodyDef.type = b2_staticBody;
 	bodyDef.position = pos;
 
-	bodyDef.fixedRotation = true;
-	bodyDef.userData = this;
+	// bodyDef.fixedRotation = true;
+	// bodyDef.userData = this;
 
 	b2PolygonShape shape;
 	

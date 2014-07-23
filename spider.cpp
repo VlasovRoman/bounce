@@ -27,13 +27,16 @@ void Spider::setWhole(bool is, bool isRight) {
 }
 
 void Spider::initBody(b2World* world, float x, float y) {
-	if(isWhole) {
+	initDynamicBodyDef();
+	
+	// if(isWhole) {
+
 		bodyDef.position = b2Vec2((x + 32) * 0.01f, (y + 32) * 0.01f);
-		bodyDef.type = b2_dynamicBody;
-		bodyDef.linearDamping = 0;
-		bodyDef.fixedRotation = true;
-		bodyDef.allowSleep = false;
-		bodyDef.userData = this;
+		// bodyDef.type = b2_dynamicBody;
+		// bodyDef.linearDamping = 0;
+		// bodyDef.fixedRotation = true;
+		// bodyDef.allowSleep = false;
+		// bodyDef.userData = this;
 
 
 		b2PolygonShape shape;
@@ -44,26 +47,26 @@ void Spider::initBody(b2World* world, float x, float y) {
 		body->CreateFixture(&shape, 1.0f);
 		body->SetGravityScale(0.0f);
 		//body->SetLinearVelocity(speed);
-	}
-	else {
-		bodyDef.position = b2Vec2((x + 16) * 0.01f, (y + 32) * 0.01f);
-		bodyDef.type = b2_dynamicBody;
-		bodyDef.linearDamping = 0;
-		bodyDef.fixedRotation = true;
-		bodyDef.allowSleep = false;
-		bodyDef.userData = this;
+	// }
+	// else {
+	// 	bodyDef.position = b2Vec2((x + 16) * 0.01f, (y + 32) * 0.01f);
+	// 	// bodyDef.type = b2_dynamicBody;
+	// 	// bodyDef.linearDamping = 0;
+	// 	// bodyDef.fixedRotation = true;
+	// 	// bodyDef.allowSleep = false;
+	// 	// bodyDef.userData = this;
 
 
-		b2PolygonShape shape;
+	// 	b2PolygonShape shape;
 		
-		shape.SetAsBox(16 * 0.01f, 32 * 0.01f);
+	// 	shape.SetAsBox(16 * 0.01f, 32 * 0.01f);
 
-		body = world->CreateBody(&bodyDef);
-		body->CreateFixture(&shape, 1.0f);
-		body->SetGravityScale(0.0f);
-		//body->SetLinearVelocity(speed);
-	}
-
+	// 	body = world->CreateBody(&bodyDef);
+	// 	body->CreateFixture(&shape, 1.0f);
+	// 	body->SetGravityScale(0.0f);
+	// 	//body->SetLinearVelocity(speed);
+	// }
+	
 }
 
 void Spider::setDirection(int x, int y) {
