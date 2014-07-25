@@ -25,7 +25,10 @@ protected:
 	b2Vec2				lastCheckpoint;
 	bool				lastType;
 
-	int 				maxVelocity;
+	float 				maxVelocity;
+	float 				appliedVelocity;
+
+	float 				jumpSpeed;
 
 	int 				bonusCount[3];
 
@@ -52,6 +55,9 @@ public:
 	void 			setOnJumpGround(bool is);
 
 	void			addBonus(int bonusId);
+
+	void 			applyBonus(int bonusId);
+	void 			deleteBonus(int bonusId);
 
 	void 			setUnderWater(bool is);
 

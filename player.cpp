@@ -22,6 +22,8 @@ Player::Player(Painter* painter) : GameObject(BALL), iDrawable() {
 	isBig = false;
 	lastType = false;
 	maxVelocity = 2;
+	appliedVelocity =0.6f;
+	jumpSpeed = 2.5f;
 	cout << "Player initialized" << endl;
 }
 
@@ -81,36 +83,22 @@ void Player::control(EventListener* eventListener) {
 	if(isBig)
 		rad = 24;
 
-	float appliedVelocity = 0.6;
-	if(bonusCount[0] > 0) {
-		appliedVelocity = 1.2;
-		bonusCount[0]--;
-		maxVelocity = 4;
-	}
-	else
-		maxVelocity = 2;
+	for(int i = 0; i < 3; i++)  {
+		if(bonusCount[i] > 0) {
+			bonusCount[i]--;
 
-	float jumpSpeed = 2.5f;
-	if(bonusCount[1] > 0) {
-		lastBody->SetGravityScale(-1.0f);
-		bonusCount[1]--;
-		jumpSpeed *= -1.0f;
-	}
-	else {
-		lastBody->SetGravityScale(1.0f);
-	}
-
-	if(bonusCount[2] > 0) {
-		jumpSpeed *= 3;
-		bonusCount[2]--;
+			if(bonusCount[i] == 0) {
+				deleteBonus(i);
+			}
+		}
 	}
 
 	if(onJumpGround) {
 		jumpSpeed *= 2;
 	}
 
-	cout << "collisionPoint " << (int)(collisionPoint.x * 100) << " " << (int)(collisionPoint.y * 100) << endl;
-	cout << "position " << (int)(lastBody->GetPosition().x * 100 + rad) << " " << (int)(lastBody->GetPosition().y * 100 + rad) << endl;
+	// cout << "collisionPoint " << (int)(collisionPoint.x * 100) << " " << (int)(collisionPoint.y * 100) << endl;
+	//cout << "position " << (int)(lastBody->GetPosition().x * 100 + rad) << " " << (int)(lastBody->GetPosition().y * 100 + rad) << endl;
 
 	if(((int)(collisionPoint.y * 100) > (int)(lastBody->GetPosition().y * 100)) &&  bonusCount[1] == 0){
 		onGround = true;
@@ -119,14 +107,14 @@ void Player::control(EventListener* eventListener) {
 		onGround = true;
 	}
 
-	cout << onGround << endl;
+	//cout << onGround << endl;
 	
 	if(killed) {
 		killedTimeNow++;
 	}
 	else {
 		if(underWater) {
-			cout << "UNDER" << endl;
+			//cout << "UNDER" << endl;
 			if(!isBig) {
 				lastBody->ApplyForceToCenter(b2Vec2(0.0f, -0.25f), false);
 			}
@@ -181,7 +169,36 @@ void Player::setUnderWater(bool is) {
 void Player::addBonus(int bonusId) {
 	if(bonusCount[bonusId] == 0) {
 		bonusCount[bonusId] = 60 * 5;
+		applyBonus(bonusId);
 	}
+}
+
+void Player::applyBonus(int bonusId) {
+	if(bonusId == 0) {
+		maxVelocity *= 2;
+		appliedVelocity *= 2;
+	}
+	else if(bonusId == 1) {
+		lastBody->SetGravityScale(-1.0f);
+		jumpSpeed *= -1.0f;
+	}
+	else if(bonusId == 2) {
+		jumpSpeed *= 2.5;
+	}
+}
+
+void Player::deleteBonus(int bonusId) {
+	if(bonusId == 0) {
+		maxVelocity /= 2;
+		appliedVelocity /= 2;
+	}
+	else if(bonusId == 1) {
+		lastBody->SetGravityScale(1.0f);
+		jumpSpeed *= -1.0f;
+	}
+	else if(bonusId == 2) {
+		jumpSpeed /= 2.5;
+	}	
 }
 
 void Player::birth(bool awake, int modificationId) {
