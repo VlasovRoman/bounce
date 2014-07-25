@@ -24,6 +24,7 @@ Player::Player(Painter* painter) : GameObject(BALL), iDrawable() {
 	maxVelocity = 2;
 	appliedVelocity =0.6f;
 	jumpSpeed = 2.5f;
+	radius = 15.4;
 	cout << "Player initialized" << endl;
 }
 
@@ -45,7 +46,7 @@ void Player::initBody(b2World* world, float x, float y) {
 		bodyDef.fixedRotation = false;
 		
 		b2CircleShape shape;
-		shape.m_radius = 16 * 0.01f;
+		shape.m_radius = radius * 0.01f;
 	
 		fixture.shape = &shape;
 		fixture.friction = 1.0f;
@@ -79,9 +80,6 @@ void Player::initBody(b2World* world, float x, float y) {
 }
 
 void Player::control(EventListener* eventListener) {
-	int rad = 16;
-	if(isBig)
-		rad = 24;
 
 	for(int i = 0; i < 3; i++)  {
 		if(bonusCount[i] > 0) {
@@ -207,7 +205,6 @@ void Player::birth(bool awake, int modificationId) {
 
 	if(modificationId == 10) {
 		isBig = true;
-		cout << "IS BIG" << endl;
 	}
 
 	if(awake){
@@ -251,16 +248,10 @@ void Player::setCheckpoint(b2Vec2 position) {
 }
 
 void Player::draw(Painter* painter) {
-	int rad;
-	if(isBig)
-		rad = 24;
-	else
-		rad = 16;
-
 	float x = lastBody->GetPosition().x * 100;
 	float y = lastBody->GetPosition().y * 100;
 
-	painter->drawBall(x - rad, y - rad, isBig, killed);
+	painter->drawBall(x - radius, y - radius, isBig, killed);
 }
 
 void Player::addLifes(int i) {
@@ -283,6 +274,8 @@ void Player::inflate() {
 
 	body->SetTransform(b2Vec2(-100 * 0.01f, 0.0 * 0.01f), 0.0f);
 
+	radius = 24;
+
 	isBig = true;
 }
 
@@ -300,6 +293,8 @@ void Player::blowAway() {
 	bigBall->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
 
 	bigBall->SetTransform(b2Vec2(-100 * 0.01f, 0.0 * 0.01f), 0.0f);
+
+	radius = 15.4f;
 
 	isBig = false;
 }

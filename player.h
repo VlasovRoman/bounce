@@ -27,6 +27,7 @@ protected:
 
 	float 				maxVelocity;
 	float 				appliedVelocity;
+	float 				radius;
 
 	float 				jumpSpeed;
 
