@@ -70,7 +70,7 @@ public:
 	void 			addLifes(int i);
 	int 			getLives();
 
-	void 			birth(bool awake, int modificationId = false);
+	void 			birth(bool awake, bool newLevel, int modificationId = false);
 
 	bool 			getDeath();
 	bool			getBig();

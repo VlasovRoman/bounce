@@ -250,10 +250,7 @@ void Game::loadLevel()
 			case TO_SPAWN:
 				{
 					player->setCheckpoint(b2Vec2(x * 32 * 0.01f, y * 32 * 0.01f));
-					if(levelId == 1)
-						player->birth(true, map[x][y].modification);
-					else
-						player->birth(false, map[x][y].modification);
+					player->birth(false, true, map[x][y].modification);
 				} break;
 			case TO_PORTAL:
 				{

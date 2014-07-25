@@ -199,7 +199,7 @@ void Player::deleteBonus(int bonusId) {
 	}	
 }
 
-void Player::birth(bool awake, int modificationId) {
+void Player::birth(bool awake, bool newLevel, int modificationId) {
 	killedTimeNow = 0;
 	killed = false;
 
@@ -211,9 +211,10 @@ void Player::birth(bool awake, int modificationId) {
 		lives = 3;
 	}
 	else {
-		isBig = lastType;
-
+		if(!newLevel)
+			isBig = lastType;
 	}
+
 	if(isBig){
 		inflate();
 	}
