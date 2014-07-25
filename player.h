@@ -67,7 +67,6 @@ public:
 	void 			addLifes(int i);
 	int 			getLives();
 
-
 	bool 			getDeath();
 	bool			getBig();
 
