@@ -14,29 +14,28 @@ Player::Player(Painter* painter) : GameObject(BALL), iDrawable() {
 	bonusCount[1] = 0;
 	bonusCount[2] = 0;
 
-	killed = false;
+	killedTimeNow = 0;
 	lives = 3;
 
-	killedTime = 20;
-	killedTimeNow = 0;
-	isBig = false;
 	lastType = false;
+	
+	isBig = false;
+	radius = 15.4;
+
 	maxVelocity = 2;
 	appliedVelocity =0.6f;
 	jumpSpeed = 2.5f;
-	radius = 15.4;
-	cout << "Player initialized" << endl;
 }
 
 bool Player::getDeath() {
-	if(lives == 0)
+	if(lives == 0 && killedTimeNow == 0)
 		return true;
 	else 
 		return false;
 }
 
 void Player::initBody(b2World* world, float x, float y) {
-	setCheckpoint(b2Vec2((x + 16) * 0.01f, (y + 16) * 0.01f));
+	setCheckpoint(b2Vec2((x + radius) * 0.01f, (y + radius) * 0.01f));
 
 	{
 		initDynamicBodyDef();
@@ -79,6 +78,15 @@ void Player::initBody(b2World* world, float x, float y) {
 	lastBody = body;
 }
 
+bool Player::isContactWithGround(b2Vec2 collisionPoint) {
+	if(((int)(collisionPoint.y * 100) > (int)(lastBody->GetPosition().y * 100)) &&  bonusCount[1] == 0){
+		onGround = true;
+	}
+	if(((int)(collisionPoint.y * 100) < (int)(lastBody->GetPosition().y * 100)) && bonusCount[1] != 0) {
+		onGround = true;
+	}
+}
+
 void Player::control(EventListener* eventListener) {
 
 	for(int i = 0; i < 3; i++)  {
@@ -94,25 +102,16 @@ void Player::control(EventListener* eventListener) {
 	if(onJumpGround) {
 		jumpSpeed *= 2;
 	}
-
-	// cout << "collisionPoint " << (int)(collisionPoint.x * 100) << " " << (int)(collisionPoint.y * 100) << endl;
-	//cout << "position " << (int)(lastBody->GetPosition().x * 100 + rad) << " " << (int)(lastBody->GetPosition().y * 100 + rad) << endl;
-
-	if(((int)(collisionPoint.y * 100) > (int)(lastBody->GetPosition().y * 100)) &&  bonusCount[1] == 0){
-		onGround = true;
-	}
-	if(((int)(collisionPoint.y * 100) < (int)(lastBody->GetPosition().y * 100)) && bonusCount[1] != 0) {
-		onGround = true;
-	}
-
-	//cout << onGround << endl;
 	
-	if(killed) {
-		killedTimeNow++;
+	if(killedTimeNow) {
+		killedTimeNow--;
+
+		if(!killedTimeNow) {
+			birth(false);
+		}
 	}
-	else {
+	else{
 		if(underWater) {
-			//cout << "UNDER" << endl;
 			if(!isBig) {
 				lastBody->ApplyForceToCenter(b2Vec2(0.0f, -0.25f), false);
 			}
@@ -131,18 +130,12 @@ void Player::control(EventListener* eventListener) {
 			velocity += b2Vec2(0.0f, -jumpSpeed);
 		}
 
-		onGround = false;
-		onJumpGround = false;
 		lastBody->SetLinearVelocity(velocity);
-	}
-
-	if(killedTimeNow >= killedTime) {
-		birth(false);
 	}
 
 	underWater = false;
 	onGround = false;
-	collisionPoint = b2Vec2(0, 0);
+	onJumpGround = false;
 }
 
 bool Player::getBig() {
@@ -154,10 +147,6 @@ void Player::destroyBody() {
 
 	world->DestroyBody(body);
 	world->DestroyBody(bigBall);
-}
-
-void Player::setOnGround(bool is) {
-	onGround = is;
 }
 
 void Player::setUnderWater(bool is) {
@@ -201,7 +190,7 @@ void Player::deleteBonus(int bonusId) {
 
 void Player::birth(bool awake, bool newLevel, int modificationId) {
 	killedTimeNow = 0;
-	killed = false;
+	// killed = false;
 
 	if(modificationId == 10) {
 		isBig = true;
@@ -228,17 +217,16 @@ void Player::birth(bool awake, bool newLevel, int modificationId) {
 }
 
 void Player::setCollisionPoint(b2Vec2 collisionPoint, bool jumpingWall) {
-	if((collisionPoint.y == lastBody->GetPosition().y)) {
-			cout << "Skipine..." << endl;
+	if(collisionPoint.y != lastBody->GetPosition().y) {
+		isContactWithGround(collisionPoint);
 	}
-	else
-		this->collisionPoint = collisionPoint;
+
 	onJumpGround = jumpingWall;
 }
 
 void Player::kill() {
-	if(!killed) {
-		killed = true;
+	if(!killedTimeNow ) {
+		killedTimeNow = 20;
 		lives--;
 	}
 }
@@ -249,6 +237,8 @@ void Player::setCheckpoint(b2Vec2 position) {
 }
 
 void Player::draw(Painter* painter) {
+	bool killed = killedTimeNow;
+
 	float x = lastBody->GetPosition().x * 100;
 	float y = lastBody->GetPosition().y * 100;
 
@@ -278,10 +268,6 @@ void Player::inflate() {
 	radius = 24;
 
 	isBig = true;
-}
-
-void Player::setOnJumpGround(bool is){
-	onJumpGround = is;
 }
 
 void Player::blowAway() {
