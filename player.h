@@ -41,15 +41,17 @@ protected:
 	void 	deleteBonus(int bonusId);
 	
 	bool	isContactWithGround(b2Vec2 contactPoint);
-
-	void 	destroyBody();
 public:
 	Player();
 	Player(Painter* painter);
 	~Player();
 
-	void 			control(EventListener* eventListener);
 	void 			initBody(b2World* world, float x, float y);
+
+	void 			birth(bool awake, bool newLevel = false, int modificationId = false);
+	void 			kill();
+
+	void 			control(EventListener* eventListener);
 
 	void			setCheckpoint(b2Vec2 position);
 
@@ -65,12 +67,9 @@ public:
 	void 			addLifes(int i);
 	int 			getLives();
 
-	void 			birth(bool awake, bool newLevel = false, int modificationId = false);
 
 	bool 			getDeath();
 	bool			getBig();
-
-	void 			kill();
 
 	b2Body* 		getBody();
 
