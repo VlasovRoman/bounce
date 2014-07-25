@@ -11,11 +11,8 @@ struct SPIDER_DIRECTION {
 
 class Spider: public GameObject, public iDrawable {
 protected:
-	float 				velocity;
-
 	SPIDER_DIRECTION	direction;
 
-	void				setDirection(int x, int y);
 public:
 	Spider();
 	Spider(Painter* painter);
@@ -30,4 +27,3 @@ public:
 };
 
 #endif
- 

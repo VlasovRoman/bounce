@@ -30,9 +30,7 @@ class Painter {
 	//Bonuses:	3 textures 			[27..29]
 	//Menu:		2 textures 			[34..35]
 
-
 	SDL_Texture* 	loadTexture(string nameOfTexture);
-
 
 	void 			drawTexture(SDL_Texture* texture, float x, float y, float angle = 0);
 	void			rotateTexture(SDL_Texture* texture, SDL_Texture* target,float angle);
@@ -57,7 +55,7 @@ public:
 	void 		drawLife(float x, float y);
 	void 		drawCheckpoint(float x, float y, bool activated);
 	void 		drawRing(float x, float y, bool isBig, bool isRight, bool isVert, bool active);
-	void 		drawSpider(float x, float y, int partNumber);
+	void 		drawSpider(float x, float y);
 	void 		drawPump(float x, float y, bool inflator, int directionId);
 	void 		drawJumpWall(float x, float y, int type);
 	void 		drawBonus(float x, float y, int bonusTypeId, int directionId);

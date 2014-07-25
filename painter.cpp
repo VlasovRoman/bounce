@@ -194,7 +194,7 @@ void Painter::drawSpike(float x, float y, int directionId) {
 	drawTexture(textures[7], x - camera->x, y - camera->y, angle);
 }
 
-void Painter::drawSpider(float x, float y, int numnerOfpart) {
+void Painter::drawSpider(float x, float y) {
 	drawTexture(textures[18], x - camera->x, y - camera->y);
 }
 

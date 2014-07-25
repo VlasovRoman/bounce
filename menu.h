@@ -13,7 +13,6 @@ struct MenuItem {
 	bool		selected;
 };
 
-
 class Menu {
 protected:
 	int 				count;

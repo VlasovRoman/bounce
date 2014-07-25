@@ -114,6 +114,8 @@ void Player::control(EventListener* eventListener) {
 		}
 	}
 
+	jumpSpeed = 2.5f;
+
 	if(onJumpGround) {
 		jumpSpeed *= 2;
 	}
@@ -249,13 +251,6 @@ bool Player::isContactWithGround(b2Vec2 collisionPoint) {
 	if(((int)(collisionPoint.y * 100) < (int)(lastBody->GetPosition().y * 100)) && bonusCount[1] != 0) {
 		onGround = true;
 	}
-}
-
-void Player::destroyBody() {
-	b2World* world = body->GetWorld();
-
-	world->DestroyBody(body);
-	world->DestroyBody(bigBall);
 }
 
 void Player::applyBonus(int bonusId) {

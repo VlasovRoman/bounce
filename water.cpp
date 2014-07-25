@@ -1,5 +1,4 @@
 #include "water.h"
-#include <iostream>
 
 Water::Water() : GameObject(WTR) {}
 

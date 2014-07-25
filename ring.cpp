@@ -13,6 +13,7 @@ void Ring::init(bool isVert, bool isBig) {
 
 void Ring::initBody(b2World* world, float x, float y) {
 	initStaticBodyDef();
+
 	if(isVert) {
 		bodyDef.position = b2Vec2((x + 16) * 0.01f, (y + 32) * 0.01f);
 
@@ -31,7 +32,10 @@ void Ring::initBody(b2World* world, float x, float y) {
 		bodyDef.position = b2Vec2((x + 32) * 0.01f, (y + 16) * 0.01f);
 		b2PolygonShape shape;
 	
-		shape.SetAsBox(32 * 0.01f, 16 * 0.01f);
+		if(!isBig)
+			shape.SetAsBox(20 * 0.01f, 10 * 0.01f);
+		else
+			shape.SetAsBox(32 * 0.01f, 16 * 0.01f);	
 
 		body = world->CreateBody(&bodyDef);
 
@@ -43,9 +47,9 @@ bool Ring::getBig() {
 	return isBig;
 }
 
-bool Ring::getOrientation() {
-	return isVert;
-}
+// bool Ring::getOrientation() {
+// 	return isVert;
+// }
 
 void Ring::setPlayerPosition(b2Vec2* position) {
 	playerPosition = position;
@@ -113,15 +117,10 @@ void Ring::draw(Painter* painter,bool drawRightPart) {
 		y -= 32;
 	}
 	else {
-		// x += 16;
 		x -= 16;
 		y -= 32;
-		// x -= 16;
-		// y -= 32;
 	}
 	painter->drawRing(x, y, isBig, drawRightPart, isVert ,active);
 }
 
-void Ring::draw(Painter* painter) {
-
-}
+void Ring::draw(Painter* painter) {}

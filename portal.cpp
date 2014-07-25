@@ -16,8 +16,6 @@ void Portal::initBody(b2World* world, float x, float y) {
 
 	body = world->CreateBody(&bodyDef);
 	body->CreateFixture(&shape, 1.0f);
-
-	active = false;
 }
 
 void Portal::setActive() {

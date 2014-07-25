@@ -6,26 +6,27 @@
 
 class Ring : public GameObject, public iDrawable {
 protected:
-	b2Vec2*				playerPosition;
-	b2Vec2				lastDelta;
+	b2Vec2*	playerPosition;
+	b2Vec2	lastDelta;
 
-	bool 				isBig;
-	bool				isVert;
-	bool				active;
+	bool 	isBig;
+	bool	isVert;
+	bool	active;
+
+	void 			diactivate();
 public:
 	Ring();
 
 	void			init(bool isVert, bool isBig);
 	void 			initBody(b2World* world, float x, float y);
 
-	bool			getOrientation();
-
+	// bool			getOrientation();
 	bool			getBig();
 
 	void 			setPlayerPosition(b2Vec2* position);
 	void 			checkOnThePassage();
+
 	bool			isActive();
-	void 			diactivate();
 
 	void 			draw(Painter* painter, bool drawRightPart);
 	void 			draw(Painter* painter);
