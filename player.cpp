@@ -1,9 +1,5 @@
 #include "player.h"
 
-#include <iostream>
-
-using namespace std;
-
 Player::Player(Painter* painter) : GameObject(BALL), iDrawable() {
 	camera = painter->getCamera();
 	onGround = false;
@@ -291,6 +287,8 @@ b2Body* Player::getBody() {
 }
 
 Player::~Player() {
-	cout << "deleting player..." << endl;
 	camera = NULL;
+	body = NULL;
+	bigBall = NULL;
+	lastBody = NULL;
 }
