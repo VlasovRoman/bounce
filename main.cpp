@@ -69,7 +69,7 @@ int main() {
 	mainMenu.addItem("Continue", false);
 	mainMenu.addItem("Quit", true);
 
-	mainMenu.init();
+	// mainMenu.init();
 
 	ifstream levels;
 	levels.open("resources/levels.sv");
@@ -85,7 +85,7 @@ int main() {
 		selectLevel.addItem(levelName, true);
 	}
 
-	selectLevel.init();
+	// selectLevel.init();
 	listener->setStatus(LS_MENU);
 	// game.loadLevel();
 	// game.setEventListener(listener);

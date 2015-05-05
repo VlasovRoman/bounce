@@ -1,77 +1,57 @@
 #include "menu.h"
+#include <iostream>
+
+using namespace std;
 
 Menu::Menu(EventListener* listener) {
 	this->listener = listener;
-	itemsCount = 0;
-	cursor = -1;
-	enterPressed = false;
-	count = 0;
-	countMax = 75;
-}
-
-void Menu::init() {	
-	bool is = false;
-	for(int i = 0; i < items.size(); i++) {
-		if(items[i].enable && !is) {
-			items[i].selected = true;
-			is = true;
-		}
-		else
-			items[i].selected = false;
-	}
+	selectedItemId = -1;
 }
 
 void Menu::frame() {
 	listener->listen();
 
+	int nextId = 0;
+ 	if(listener->isKeyDown(KEY_UP) || listener->isKeyDown(KEY_DOWN)){
+ 		if(listener->isKeyDown(KEY_DOWN)) {
+ 			nextId = 1;
+ 		}
+ 		else
+ 			nextId = -1;
+
+ 		int nextCursor = selectedItemId + nextId;
+
+ 		while(items[nextCursor].enable == false) {
+ 			nextCursor = nextCursor + nextId;
+ 		}
+
+ 		if(nextCursor < 0)
+ 			nextCursor = items.size() - 1;
+ 		if(nextCursor >= items.size()) 
+ 			nextCursor = 0;
+
+ 		selectedItemId = nextCursor;
+	}
+
 	enterPressed = false;
-		if(listener->isKeyDown(KEY_UP)){
-			for(int i = 0; i < items.size(); i++) {
-				if(items[i].selected) {
-					int nextCursor = i - 1;
-					while(items[nextCursor].enable == false) {
-						nextCursor--;
-						if(nextCursor < 0) {
-							nextCursor = items.size();
-						}
-					} 
-					items[nextCursor].selected = true;
-					items[i].selected = false;
-					break;
-				}
-			}
-		}
-		if(listener->isKeyDown(KEY_DOWN)) {
-			for(int i = 0; i < items.size(); i++) {
-				if(items[i].selected) {
-					int nextCursor = i + 1;
-					while(items[nextCursor].enable == false) {
-						nextCursor++;
-						if(nextCursor >= items.size()) {
-							nextCursor = 0;
-						}
-					} 
-					items[nextCursor].selected = true;
-					items[i].selected = false;
-					break;
-				}
-			}
-		}
-		if(listener->isKeyDown(KEY_ENTER)) {
-			enterPressed = true;
-		}
+
+ 	if(listener->isKeyDown(KEY_ENTER)) {
+ 		enterPressed = true;
+ 	}
 }
 
 int Menu::getSelectedItemId() {
-	for(int i = 0; i < items.size(); i++) {
-		if(items[i].selected)
-			return i;
-	}
+	return selectedItemId;
 }
 
 void Menu::addItem(string text, bool enable) {
+
 	MenuItem item = {text, enable};
 	items.push_back(item);
+
+	if(items.size() >= 1) {
+		selectedItemId = 0;
+	}
 }
 
 void Menu::draw(Painter* painter) {
@@ -85,7 +65,7 @@ void Menu::draw(Painter* painter) {
 		}
 		else {
 			painter->drawText(15, 15 + (i - di) * 32, items[i].text, 0, 0, 0);
-			if(items[i].selected == true) {
+			if(i == selectedItemId) {
 				painter->drawMenuItemSelector(12, 15 + (i - di) * 32);
 			}
 		}
@@ -95,8 +75,8 @@ void Menu::draw(Painter* painter) {
 bool Menu::isItemPressed(string text) {
 	if(enterPressed) {
 		for(int i = 0; i < items.size(); i++) {
-			if(items[i].text == text) {
-				return items[i].selected;
+			if(items[i].text == text && i == selectedItemId) {
+				return true;
 			}
 		}
 	}

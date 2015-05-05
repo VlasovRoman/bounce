@@ -10,19 +10,20 @@ using namespace std;
 struct MenuItem {
 	string		text;
 	bool 		enable;
-	bool		selected;
+	// bool		selected;
 };
 
 class Menu {
 protected:
-	int 				count;
-	int 				countMax;
-	int 				itemsCount;
+	// int 				count;
+	// int 				countMax;
+	// int 				itemsCount;
 	EventListener*		listener;
+	// MenuItem* 			cursor;
 
 	vector<MenuItem>	items;
 
-	int 				cursor;
+	// int 				cursor;
 	int 				selectedItemId;
 
 	bool				enterPressed;
@@ -32,8 +33,7 @@ public:
 
 	void 				frame();
 
-	void 				init();
-	
+	// void 				init();
 
 	void 				enableItem(string text);
 	bool				isItemPressed(string text);
